@@ -28,19 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.UMainForm = new ReaLTaiizor.Forms.DungeonForm();
             this.panel2 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.dungeonListBox1 = new ReaLTaiizor.Controls.DungeonListBox();
+            this.UListImagesFiles = new ReaLTaiizor.Controls.DungeonListBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.dungeonRichTextBox1 = new ReaLTaiizor.Controls.DungeonRichTextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.UTextOCRResult = new ReaLTaiizor.Controls.DungeonRichTextBox();
+            this.PictureSnaped = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.dungeonButtonRight1 = new ReaLTaiizor.Controls.DungeonButtonRight();
-            this.dungeonButtonRight2 = new ReaLTaiizor.Controls.DungeonButtonRight();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.BtnSnapshot = new ReaLTaiizor.Controls.DungeonButtonRight();
+            this.BtnCopyResultText = new ReaLTaiizor.Controls.DungeonButtonRight();
+            this.StatusStripBar = new System.Windows.Forms.StatusStrip();
             this.UMainControlBox = new ReaLTaiizor.Controls.DungeonControlBox();
+            this.StatTotalFileNum = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatWordCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatAbout = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.NotifyIconOCR = new System.Windows.Forms.NotifyIcon(this.components);
             this.UMainForm.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -51,9 +57,10 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureSnaped)).BeginInit();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.StatusStripBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // UMainForm
@@ -62,7 +69,7 @@
             this.UMainForm.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
             this.UMainForm.Controls.Add(this.panel2);
             this.UMainForm.Controls.Add(this.panel1);
-            this.UMainForm.Controls.Add(this.statusStrip1);
+            this.UMainForm.Controls.Add(this.StatusStripBar);
             this.UMainForm.Controls.Add(this.UMainControlBox);
             this.UMainForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.UMainForm.FillEdgeColorA = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(68)))), ((int)(((byte)(63)))));
@@ -73,6 +80,7 @@
             this.UMainForm.HeaderEdgeColorA = System.Drawing.Color.FromArgb(((int)(((byte)(87)))), ((int)(((byte)(85)))), ((int)(((byte)(77)))));
             this.UMainForm.HeaderEdgeColorB = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(68)))), ((int)(((byte)(63)))));
             this.UMainForm.Location = new System.Drawing.Point(0, 0);
+            this.UMainForm.MinimumSize = new System.Drawing.Size(500, 250);
             this.UMainForm.Name = "UMainForm";
             this.UMainForm.Padding = new System.Windows.Forms.Padding(20, 56, 20, 16);
             this.UMainForm.RoundCorners = true;
@@ -101,7 +109,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.dungeonListBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.UListImagesFiles);
             // 
             // splitContainer1.Panel2
             // 
@@ -110,15 +118,15 @@
             this.splitContainer1.SplitterDistance = 185;
             this.splitContainer1.TabIndex = 0;
             // 
-            // dungeonListBox1
+            // UListImagesFiles
             // 
-            this.dungeonListBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dungeonListBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.dungeonListBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.dungeonListBox1.FormattingEnabled = true;
-            this.dungeonListBox1.IntegralHeight = false;
-            this.dungeonListBox1.ItemHeight = 18;
-            this.dungeonListBox1.Items.AddRange(new object[] {
+            this.UListImagesFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UListImagesFiles.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.UListImagesFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.UListImagesFiles.FormattingEnabled = true;
+            this.UListImagesFiles.IntegralHeight = false;
+            this.UListImagesFiles.ItemHeight = 18;
+            this.UListImagesFiles.Items.AddRange(new object[] {
             "测试",
             "文件",
             "20点40分",
@@ -127,10 +135,10 @@
             "qefqwefwe却无法请问",
             "犬瘟热反动权威让父亲为",
             "qwerfqer "});
-            this.dungeonListBox1.Location = new System.Drawing.Point(0, 0);
-            this.dungeonListBox1.Name = "dungeonListBox1";
-            this.dungeonListBox1.Size = new System.Drawing.Size(185, 313);
-            this.dungeonListBox1.TabIndex = 0;
+            this.UListImagesFiles.Location = new System.Drawing.Point(0, 0);
+            this.UListImagesFiles.Name = "UListImagesFiles";
+            this.UListImagesFiles.Size = new System.Drawing.Size(185, 313);
+            this.UListImagesFiles.TabIndex = 0;
             // 
             // splitContainer2
             // 
@@ -140,45 +148,45 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.dungeonRichTextBox1);
+            this.splitContainer2.Panel1.Controls.Add(this.UTextOCRResult);
             // 
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.splitContainer2.Panel2.Controls.Add(this.pictureBox1);
+            this.splitContainer2.Panel2.Controls.Add(this.PictureSnaped);
             this.splitContainer2.Size = new System.Drawing.Size(571, 313);
             this.splitContainer2.SplitterDistance = 274;
             this.splitContainer2.TabIndex = 0;
             // 
-            // dungeonRichTextBox1
+            // UTextOCRResult
             // 
-            this.dungeonRichTextBox1.AutoWordSelection = false;
-            this.dungeonRichTextBox1.BackColor = System.Drawing.Color.Transparent;
-            this.dungeonRichTextBox1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.dungeonRichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dungeonRichTextBox1.EdgeColor = System.Drawing.Color.White;
-            this.dungeonRichTextBox1.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dungeonRichTextBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(76)))), ((int)(((byte)(76)))));
-            this.dungeonRichTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.dungeonRichTextBox1.Name = "dungeonRichTextBox1";
-            this.dungeonRichTextBox1.ReadOnly = false;
-            this.dungeonRichTextBox1.Size = new System.Drawing.Size(274, 313);
-            this.dungeonRichTextBox1.TabIndex = 0;
-            this.dungeonRichTextBox1.Text = "图片文字识别识别结果在这里！";
-            this.dungeonRichTextBox1.TextBackColor = System.Drawing.Color.White;
-            this.dungeonRichTextBox1.WordWrap = true;
+            this.UTextOCRResult.AutoWordSelection = false;
+            this.UTextOCRResult.BackColor = System.Drawing.Color.Transparent;
+            this.UTextOCRResult.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.UTextOCRResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UTextOCRResult.EdgeColor = System.Drawing.Color.White;
+            this.UTextOCRResult.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.UTextOCRResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(76)))), ((int)(((byte)(76)))));
+            this.UTextOCRResult.Location = new System.Drawing.Point(0, 0);
+            this.UTextOCRResult.Name = "UTextOCRResult";
+            this.UTextOCRResult.ReadOnly = false;
+            this.UTextOCRResult.Size = new System.Drawing.Size(274, 313);
+            this.UTextOCRResult.TabIndex = 0;
+            this.UTextOCRResult.Text = "图片文字识别识别结果在这里！";
+            this.UTextOCRResult.TextBackColor = System.Drawing.Color.White;
+            this.UTextOCRResult.WordWrap = true;
             // 
-            // pictureBox1
+            // PictureSnaped
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(254)))), ((int)(((byte)(232)))), ((int)(((byte)(184)))));
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Image = global::MengOCR.Properties.Resources._325d39fe881611ebb6edd017c2d2eca2;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(293, 313);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.PictureSnaped.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(254)))), ((int)(((byte)(232)))), ((int)(((byte)(184)))));
+            this.PictureSnaped.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PictureSnaped.Image = global::MengOCR.Properties.Resources._325d39fe881611ebb6edd017c2d2eca2;
+            this.PictureSnaped.Location = new System.Drawing.Point(0, 0);
+            this.PictureSnaped.Name = "PictureSnaped";
+            this.PictureSnaped.Size = new System.Drawing.Size(293, 313);
+            this.PictureSnaped.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.PictureSnaped.TabIndex = 0;
+            this.PictureSnaped.TabStop = false;
             // 
             // panel1
             // 
@@ -191,8 +199,8 @@
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.Controls.Add(this.dungeonButtonRight1);
-            this.flowLayoutPanel1.Controls.Add(this.dungeonButtonRight2);
+            this.flowLayoutPanel1.Controls.Add(this.BtnSnapshot);
+            this.flowLayoutPanel1.Controls.Add(this.BtnCopyResultText);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -200,56 +208,63 @@
             this.flowLayoutPanel1.TabIndex = 0;
             this.flowLayoutPanel1.WrapContents = false;
             // 
-            // dungeonButtonRight1
+            // BtnSnapshot
             // 
-            this.dungeonButtonRight1.BackColor = System.Drawing.Color.Transparent;
-            this.dungeonButtonRight1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
-            this.dungeonButtonRight1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.flowLayoutPanel1.SetFlowBreak(this.dungeonButtonRight1, true);
-            this.dungeonButtonRight1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.dungeonButtonRight1.Image = null;
-            this.dungeonButtonRight1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.dungeonButtonRight1.InactiveColorA = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(175)))), ((int)(((byte)(143)))));
-            this.dungeonButtonRight1.InactiveColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
-            this.dungeonButtonRight1.Location = new System.Drawing.Point(3, 3);
-            this.dungeonButtonRight1.Name = "dungeonButtonRight1";
-            this.dungeonButtonRight1.PressedColorA = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
-            this.dungeonButtonRight1.PressedColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
-            this.dungeonButtonRight1.PressedContourColorA = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
-            this.dungeonButtonRight1.PressedContourColorB = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
-            this.dungeonButtonRight1.Size = new System.Drawing.Size(60, 30);
-            this.dungeonButtonRight1.TabIndex = 0;
-            this.dungeonButtonRight1.Text = "截图";
-            this.dungeonButtonRight1.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.BtnSnapshot.BackColor = System.Drawing.Color.Transparent;
+            this.BtnSnapshot.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnSnapshot.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.flowLayoutPanel1.SetFlowBreak(this.BtnSnapshot, true);
+            this.BtnSnapshot.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnSnapshot.Image = null;
+            this.BtnSnapshot.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnSnapshot.InactiveColorA = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(175)))), ((int)(((byte)(143)))));
+            this.BtnSnapshot.InactiveColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnSnapshot.Location = new System.Drawing.Point(3, 3);
+            this.BtnSnapshot.Name = "BtnSnapshot";
+            this.BtnSnapshot.PressedColorA = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnSnapshot.PressedColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnSnapshot.PressedContourColorA = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnSnapshot.PressedContourColorB = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnSnapshot.Size = new System.Drawing.Size(60, 30);
+            this.BtnSnapshot.TabIndex = 0;
+            this.BtnSnapshot.Text = "截图";
+            this.BtnSnapshot.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.BtnSnapshot.Click += new System.EventHandler(this.BtnSnapshot_Click);
             // 
-            // dungeonButtonRight2
+            // BtnCopyResultText
             // 
-            this.dungeonButtonRight2.BackColor = System.Drawing.Color.Transparent;
-            this.dungeonButtonRight2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
-            this.dungeonButtonRight2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.dungeonButtonRight2.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.dungeonButtonRight2.Image = null;
-            this.dungeonButtonRight2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.dungeonButtonRight2.InactiveColorA = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(175)))), ((int)(((byte)(143)))));
-            this.dungeonButtonRight2.InactiveColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
-            this.dungeonButtonRight2.Location = new System.Drawing.Point(69, 3);
-            this.dungeonButtonRight2.Name = "dungeonButtonRight2";
-            this.dungeonButtonRight2.PressedColorA = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
-            this.dungeonButtonRight2.PressedColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
-            this.dungeonButtonRight2.PressedContourColorA = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
-            this.dungeonButtonRight2.PressedContourColorB = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
-            this.dungeonButtonRight2.Size = new System.Drawing.Size(60, 30);
-            this.dungeonButtonRight2.TabIndex = 1;
-            this.dungeonButtonRight2.Text = "复制";
-            this.dungeonButtonRight2.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.BtnCopyResultText.BackColor = System.Drawing.Color.Transparent;
+            this.BtnCopyResultText.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnCopyResultText.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnCopyResultText.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnCopyResultText.Image = null;
+            this.BtnCopyResultText.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnCopyResultText.InactiveColorA = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(175)))), ((int)(((byte)(143)))));
+            this.BtnCopyResultText.InactiveColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnCopyResultText.Location = new System.Drawing.Point(69, 3);
+            this.BtnCopyResultText.Name = "BtnCopyResultText";
+            this.BtnCopyResultText.PressedColorA = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnCopyResultText.PressedColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnCopyResultText.PressedContourColorA = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnCopyResultText.PressedContourColorB = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnCopyResultText.Size = new System.Drawing.Size(60, 30);
+            this.BtnCopyResultText.TabIndex = 1;
+            this.BtnCopyResultText.Text = "复制";
+            this.BtnCopyResultText.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.BtnCopyResultText.Click += new System.EventHandler(this.BtnCopyResultText_Click);
             // 
-            // statusStrip1
+            // StatusStripBar
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(20, 412);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(760, 22);
-            this.statusStrip1.TabIndex = 1;
-            this.statusStrip1.Text = "statusStrip1";
+            this.StatusStripBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.StatTotalFileNum,
+            this.StatWordCount,
+            this.toolStripStatusLabel2,
+            this.StatAbout});
+            this.StatusStripBar.Location = new System.Drawing.Point(20, 412);
+            this.StatusStripBar.Name = "StatusStripBar";
+            this.StatusStripBar.Size = new System.Drawing.Size(760, 22);
+            this.StatusStripBar.TabIndex = 1;
+            this.StatusStripBar.Text = "statusStrip1";
             // 
             // UMainControlBox
             // 
@@ -265,6 +280,41 @@
             this.UMainControlBox.TabIndex = 0;
             this.UMainControlBox.Text = "UMainControlBox";
             // 
+            // StatTotalFileNum
+            // 
+            this.StatTotalFileNum.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.StatTotalFileNum.Name = "StatTotalFileNum";
+            this.StatTotalFileNum.Size = new System.Drawing.Size(53, 17);
+            this.StatTotalFileNum.Text = "共123个";
+            // 
+            // StatWordCount
+            // 
+            this.StatWordCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.StatWordCount.Name = "StatWordCount";
+            this.StatWordCount.Size = new System.Drawing.Size(89, 17);
+            this.StatWordCount.Text = "识别出123个字";
+            // 
+            // StatAbout
+            // 
+            this.StatAbout.IsLink = true;
+            this.StatAbout.Name = "StatAbout";
+            this.StatAbout.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.StatAbout.Size = new System.Drawing.Size(32, 17);
+            this.StatAbout.Text = "关于";
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(571, 17);
+            this.toolStripStatusLabel2.Spring = true;
+            this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
+            // 
+            // NotifyIconOCR
+            // 
+            this.NotifyIconOCR.Text = "萌萌哒OCR";
+            this.NotifyIconOCR.Visible = true;
+            this.NotifyIconOCR.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIconOCR_MouseClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -272,11 +322,13 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.UMainForm);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MinimumSize = new System.Drawing.Size(261, 65);
+            this.MinimumSize = new System.Drawing.Size(500, 250);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "萌萌哒OCR";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.UMainForm.ResumeLayout(false);
             this.UMainForm.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -288,9 +340,11 @@
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureSnaped)).EndInit();
             this.panel1.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.StatusStripBar.ResumeLayout(false);
+            this.StatusStripBar.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -301,15 +355,20 @@
         private ReaLTaiizor.Controls.DungeonControlBox UMainControlBox;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private ReaLTaiizor.Controls.DungeonListBox dungeonListBox1;
+        private ReaLTaiizor.Controls.DungeonListBox UListImagesFiles;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip StatusStripBar;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private ReaLTaiizor.Controls.DungeonButtonRight dungeonButtonRight1;
-        private ReaLTaiizor.Controls.DungeonButtonRight dungeonButtonRight2;
-        private ReaLTaiizor.Controls.DungeonRichTextBox dungeonRichTextBox1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private ReaLTaiizor.Controls.DungeonButtonRight BtnSnapshot;
+        private ReaLTaiizor.Controls.DungeonButtonRight BtnCopyResultText;
+        private ReaLTaiizor.Controls.DungeonRichTextBox UTextOCRResult;
+        private System.Windows.Forms.PictureBox PictureSnaped;
+        private System.Windows.Forms.ToolStripStatusLabel StatTotalFileNum;
+        private System.Windows.Forms.ToolStripStatusLabel StatWordCount;
+        private System.Windows.Forms.ToolStripStatusLabel StatAbout;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.NotifyIcon NotifyIconOCR;
     }
 }
 
