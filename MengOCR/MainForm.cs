@@ -22,6 +22,8 @@ namespace MengOCR
 
         private readonly string SnapSaveDir = "";
 
+        private List<string> ImgFileList = new List<string>();
+
         public MainForm()
         {
             InitializeComponent();
@@ -48,10 +50,6 @@ namespace MengOCR
         {
             TakeSnapshot();
         }
-
-
-
-
 
         private string RunOCR<T>(T img)
         {
@@ -87,8 +85,6 @@ namespace MengOCR
             return "";
         }
 
-
-
         private void NotifyIconOCR_MouseClick(object sender, MouseEventArgs e)
         {
             this.Visible = true;
@@ -103,12 +99,24 @@ namespace MengOCR
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            try
+            {
+                UListImagesFiles.Items.Clear();
+                var files = Directory.GetFiles(SnapSaveDir);
+                foreach (var file in files)
+                {
+                    ImgFileList.Add(file);
 
+                    var fi = new FileInfo(file);
+                    UListImagesFiles.Items.Add(fi.Name);
+
+                }
+            }
+            catch (Exception)
+            {
+
+            }
         }
-
-
-
-
 
         public Bitmap GetScreen()
         {
@@ -121,8 +129,6 @@ namespace MengOCR
             }
             return bmp;
         }
-
-
 
         private void ScreenShotOk_Click(object sender, EventArgs e)
         {
@@ -190,6 +196,47 @@ namespace MengOCR
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "错误");
+            }
+        }
+
+        private void BtnRunOCR_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                var txt = RunOCR<Image>(PictureSnaped.Image);
+
+                if (!string.IsNullOrEmpty(txt))
+                {
+                    UTextOCRResult.Text = txt;
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void UListImagesFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //切换图片显示
+
+                string filename = UListImagesFiles.SelectedItem.ToString();
+                string imgPath = Path.Combine(SnapSaveDir, filename);
+
+                if (File.Exists(imgPath))
+                {
+                    PictureSnaped.ImageLocation = imgPath;
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

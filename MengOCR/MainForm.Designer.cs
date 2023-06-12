@@ -41,12 +41,13 @@
             this.BtnSnapshot = new ReaLTaiizor.Controls.DungeonButtonRight();
             this.BtnCopyResultText = new ReaLTaiizor.Controls.DungeonButtonRight();
             this.StatusStripBar = new System.Windows.Forms.StatusStrip();
-            this.UMainControlBox = new ReaLTaiizor.Controls.DungeonControlBox();
             this.StatTotalFileNum = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatWordCount = new System.Windows.Forms.ToolStripStatusLabel();
-            this.StatAbout = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatAbout = new System.Windows.Forms.ToolStripStatusLabel();
+            this.UMainControlBox = new ReaLTaiizor.Controls.DungeonControlBox();
             this.NotifyIconOCR = new System.Windows.Forms.NotifyIcon(this.components);
+            this.BtnRunOCR = new ReaLTaiizor.Controls.DungeonButtonRight();
             this.UMainForm.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -126,19 +127,11 @@
             this.UListImagesFiles.FormattingEnabled = true;
             this.UListImagesFiles.IntegralHeight = false;
             this.UListImagesFiles.ItemHeight = 18;
-            this.UListImagesFiles.Items.AddRange(new object[] {
-            "测试",
-            "文件",
-            "20点40分",
-            "啊手动阀手动阀",
-            "请问请问废弃物",
-            "qefqwefwe却无法请问",
-            "犬瘟热反动权威让父亲为",
-            "qwerfqer "});
             this.UListImagesFiles.Location = new System.Drawing.Point(0, 0);
             this.UListImagesFiles.Name = "UListImagesFiles";
             this.UListImagesFiles.Size = new System.Drawing.Size(185, 313);
             this.UListImagesFiles.TabIndex = 0;
+            this.UListImagesFiles.SelectedIndexChanged += new System.EventHandler(this.UListImagesFiles_SelectedIndexChanged);
             // 
             // splitContainer2
             // 
@@ -201,6 +194,7 @@
             // 
             this.flowLayoutPanel1.Controls.Add(this.BtnSnapshot);
             this.flowLayoutPanel1.Controls.Add(this.BtnCopyResultText);
+            this.flowLayoutPanel1.Controls.Add(this.BtnRunOCR);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -266,20 +260,6 @@
             this.StatusStripBar.TabIndex = 1;
             this.StatusStripBar.Text = "statusStrip1";
             // 
-            // UMainControlBox
-            // 
-            this.UMainControlBox.BackColor = System.Drawing.Color.Transparent;
-            this.UMainControlBox.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.UMainControlBox.DefaultLocation = true;
-            this.UMainControlBox.EnableMaximize = true;
-            this.UMainControlBox.EnableMinimize = true;
-            this.UMainControlBox.Font = new System.Drawing.Font("Marlett", 7F);
-            this.UMainControlBox.Location = new System.Drawing.Point(5, 13);
-            this.UMainControlBox.Name = "UMainControlBox";
-            this.UMainControlBox.Size = new System.Drawing.Size(64, 22);
-            this.UMainControlBox.TabIndex = 0;
-            this.UMainControlBox.Text = "UMainControlBox";
-            // 
             // StatTotalFileNum
             // 
             this.StatTotalFileNum.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
@@ -294,6 +274,13 @@
             this.StatWordCount.Size = new System.Drawing.Size(89, 17);
             this.StatWordCount.Text = "识别出123个字";
             // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(571, 17);
+            this.toolStripStatusLabel2.Spring = true;
+            this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
+            // 
             // StatAbout
             // 
             this.StatAbout.IsLink = true;
@@ -302,18 +289,47 @@
             this.StatAbout.Size = new System.Drawing.Size(32, 17);
             this.StatAbout.Text = "关于";
             // 
-            // toolStripStatusLabel2
+            // UMainControlBox
             // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(571, 17);
-            this.toolStripStatusLabel2.Spring = true;
-            this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
+            this.UMainControlBox.BackColor = System.Drawing.Color.Transparent;
+            this.UMainControlBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.UMainControlBox.DefaultLocation = true;
+            this.UMainControlBox.EnableMaximize = true;
+            this.UMainControlBox.EnableMinimize = true;
+            this.UMainControlBox.Font = new System.Drawing.Font("Marlett", 7F);
+            this.UMainControlBox.Location = new System.Drawing.Point(5, 13);
+            this.UMainControlBox.Name = "UMainControlBox";
+            this.UMainControlBox.Size = new System.Drawing.Size(64, 22);
+            this.UMainControlBox.TabIndex = 0;
+            this.UMainControlBox.Text = "UMainControlBox";
             // 
             // NotifyIconOCR
             // 
             this.NotifyIconOCR.Text = "萌萌哒OCR";
             this.NotifyIconOCR.Visible = true;
             this.NotifyIconOCR.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIconOCR_MouseClick);
+            // 
+            // BtnRunOCR
+            // 
+            this.BtnRunOCR.BackColor = System.Drawing.Color.Transparent;
+            this.BtnRunOCR.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnRunOCR.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnRunOCR.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnRunOCR.Image = null;
+            this.BtnRunOCR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnRunOCR.InactiveColorA = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(175)))), ((int)(((byte)(143)))));
+            this.BtnRunOCR.InactiveColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnRunOCR.Location = new System.Drawing.Point(135, 3);
+            this.BtnRunOCR.Name = "BtnRunOCR";
+            this.BtnRunOCR.PressedColorA = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnRunOCR.PressedColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnRunOCR.PressedContourColorA = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnRunOCR.PressedContourColorB = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnRunOCR.Size = new System.Drawing.Size(60, 30);
+            this.BtnRunOCR.TabIndex = 2;
+            this.BtnRunOCR.Text = "识别";
+            this.BtnRunOCR.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.BtnRunOCR.Click += new System.EventHandler(this.BtnRunOCR_Click);
             // 
             // MainForm
             // 
@@ -369,6 +385,7 @@
         private System.Windows.Forms.ToolStripStatusLabel StatAbout;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.NotifyIcon NotifyIconOCR;
+        private ReaLTaiizor.Controls.DungeonButtonRight BtnRunOCR;
     }
 }
 
