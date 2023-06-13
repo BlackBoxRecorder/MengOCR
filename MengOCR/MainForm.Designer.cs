@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.UMainForm = new ReaLTaiizor.Forms.DungeonForm();
             this.panel2 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -40,6 +41,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.BtnSnapshot = new ReaLTaiizor.Controls.DungeonButtonRight();
             this.BtnCopyResultText = new ReaLTaiizor.Controls.DungeonButtonRight();
+            this.BtnRunOCR = new ReaLTaiizor.Controls.DungeonButtonRight();
             this.StatusStripBar = new System.Windows.Forms.StatusStrip();
             this.StatTotalFileNum = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatWordCount = new System.Windows.Forms.ToolStripStatusLabel();
@@ -47,7 +49,6 @@
             this.StatAbout = new System.Windows.Forms.ToolStripStatusLabel();
             this.UMainControlBox = new ReaLTaiizor.Controls.DungeonControlBox();
             this.NotifyIconOCR = new System.Windows.Forms.NotifyIcon(this.components);
-            this.BtnRunOCR = new ReaLTaiizor.Controls.DungeonButtonRight();
             this.UMainForm.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -180,6 +181,7 @@
             this.PictureSnaped.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PictureSnaped.TabIndex = 0;
             this.PictureSnaped.TabStop = false;
+            this.PictureSnaped.LoadCompleted += new System.ComponentModel.AsyncCompletedEventHandler(this.PictureSnaped_LoadCompleted);
             // 
             // panel1
             // 
@@ -247,6 +249,28 @@
             this.BtnCopyResultText.TextAlignment = System.Drawing.StringAlignment.Center;
             this.BtnCopyResultText.Click += new System.EventHandler(this.BtnCopyResultText_Click);
             // 
+            // BtnRunOCR
+            // 
+            this.BtnRunOCR.BackColor = System.Drawing.Color.Transparent;
+            this.BtnRunOCR.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnRunOCR.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnRunOCR.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnRunOCR.Image = null;
+            this.BtnRunOCR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnRunOCR.InactiveColorA = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(175)))), ((int)(((byte)(143)))));
+            this.BtnRunOCR.InactiveColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnRunOCR.Location = new System.Drawing.Point(135, 3);
+            this.BtnRunOCR.Name = "BtnRunOCR";
+            this.BtnRunOCR.PressedColorA = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnRunOCR.PressedColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnRunOCR.PressedContourColorA = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnRunOCR.PressedContourColorB = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnRunOCR.Size = new System.Drawing.Size(60, 30);
+            this.BtnRunOCR.TabIndex = 2;
+            this.BtnRunOCR.Text = "识别";
+            this.BtnRunOCR.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.BtnRunOCR.Click += new System.EventHandler(this.BtnRunOCR_Click);
+            // 
             // StatusStripBar
             // 
             this.StatusStripBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -305,31 +329,10 @@
             // 
             // NotifyIconOCR
             // 
+            this.NotifyIconOCR.Icon = ((System.Drawing.Icon)(resources.GetObject("NotifyIconOCR.Icon")));
             this.NotifyIconOCR.Text = "萌萌哒OCR";
             this.NotifyIconOCR.Visible = true;
             this.NotifyIconOCR.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIconOCR_MouseClick);
-            // 
-            // BtnRunOCR
-            // 
-            this.BtnRunOCR.BackColor = System.Drawing.Color.Transparent;
-            this.BtnRunOCR.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
-            this.BtnRunOCR.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.BtnRunOCR.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.BtnRunOCR.Image = null;
-            this.BtnRunOCR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnRunOCR.InactiveColorA = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(175)))), ((int)(((byte)(143)))));
-            this.BtnRunOCR.InactiveColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
-            this.BtnRunOCR.Location = new System.Drawing.Point(135, 3);
-            this.BtnRunOCR.Name = "BtnRunOCR";
-            this.BtnRunOCR.PressedColorA = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
-            this.BtnRunOCR.PressedColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
-            this.BtnRunOCR.PressedContourColorA = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
-            this.BtnRunOCR.PressedContourColorB = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
-            this.BtnRunOCR.Size = new System.Drawing.Size(60, 30);
-            this.BtnRunOCR.TabIndex = 2;
-            this.BtnRunOCR.Text = "识别";
-            this.BtnRunOCR.TextAlignment = System.Drawing.StringAlignment.Center;
-            this.BtnRunOCR.Click += new System.EventHandler(this.BtnRunOCR_Click);
             // 
             // MainForm
             // 
@@ -338,6 +341,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.UMainForm);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(500, 250);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -345,6 +349,7 @@
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.UMainForm.ResumeLayout(false);
             this.UMainForm.PerformLayout();
             this.panel2.ResumeLayout(false);

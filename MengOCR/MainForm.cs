@@ -10,19 +10,22 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static ReaLTaiizor.Drawing.Poison.PoisonPaint.ForeColor;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MengOCR
 {
+
     public partial class MainForm : Form
     {
-
+        private readonly FileSystemWatcher FsWatcher = new FileSystemWatcher();
         private readonly PaddleOCREngine engine;
         private ScreenSnap snapForm;
         private Bitmap curBitmap;
 
         private readonly string SnapSaveDir = "";
 
-        private List<string> ImgFileList = new List<string>();
+        private readonly List<string> ImgFileList = new List<string>();
 
         public MainForm()
         {
@@ -44,6 +47,7 @@ namespace MengOCR
                 Directory.CreateDirectory(SnapSaveDir);
             }
 
+            OnFsChanges();
         }
 
         private void BtnSnapshot_Click(object sender, EventArgs e)
@@ -51,9 +55,50 @@ namespace MengOCR
             TakeSnapshot();
         }
 
+        /// <summary>
+        /// 初始化文件变化监听
+        /// </summary>
+        private void OnFsChanges()
+        {
+            FsWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime;
+            FsWatcher.IncludeSubdirectories = true;
+            FsWatcher.Path = SnapSaveDir;
+            FsWatcher.Created += new FileSystemEventHandler(FsWatcher_Created);
+            FsWatcher.EnableRaisingEvents = true;
+        }
+
+
+        private void FsWatcher_Created(object sender, FileSystemEventArgs e)
+        {
+            try
+            {
+                string newImgPath = e.FullPath;
+                if (!Utils.IsImageFile(newImgPath)) return;
+                this.BeginInvoke(new EventHandler(delegate
+                {
+                    FileInfo fi = new FileInfo(newImgPath);
+
+                    UpdateImgListBox(fi.Name);
+
+                }));
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void UpdateImgListBox(string item)
+        {
+            UListImagesFiles.Items.Insert(0, item);
+            StatTotalFileNum.Text = $"共{UListImagesFiles.Items.Count}个图片";
+        }
+
         private string RunOCR<T>(T img)
         {
             int success = 0;
+            string result = "";
             do
             {
                 try
@@ -62,18 +107,23 @@ namespace MengOCR
                     {
                         OCRResult ocrResult = engine.DetectText(img as string) ??
                             throw new Exception("识别出错了！！！");
-                        return ocrResult.Text;
+                        result = ocrResult.Text;
                     }
-                    else if (typeof(T) == typeof(Image))
+                    else if (typeof(T) == typeof(System.Drawing.Image))
                     {
-                        OCRResult ocrResult = engine.DetectText(img as Image) ??
+                        OCRResult ocrResult = engine.DetectText(img as System.Drawing.Image) ??
                             throw new Exception("识别出错了！！！");
-                        return ocrResult.Text;
+                        result = ocrResult.Text;
                     }
                     else
                     {
-                        return "";
+                        result = "出错了！！！";
                     }
+
+                    StatWordCount.Text = $"共识别{result.Length}个字";
+
+                    return result;
+
                 }
                 catch (Exception ex)
                 {
@@ -82,7 +132,7 @@ namespace MengOCR
                 }
             } while (0 < success && success < 5);
 
-            return "";
+            return result;
         }
 
         private void NotifyIconOCR_MouseClick(object sender, MouseEventArgs e)
@@ -101,22 +151,43 @@ namespace MengOCR
         {
             try
             {
+                NotifyIconOCR.Visible = false;
+                StatTotalFileNum.Text = string.Empty;
+                StatWordCount.Text = string.Empty;
+
                 UListImagesFiles.Items.Clear();
-                var files = Directory.GetFiles(SnapSaveDir);
+                var files = Directory.GetFiles(SnapSaveDir).ToList();
                 foreach (var file in files)
                 {
                     ImgFileList.Add(file);
 
                     var fi = new FileInfo(file);
-                    UListImagesFiles.Items.Add(fi.Name);
+                    UpdateImgListBox(fi.Name);
 
                 }
-            }
-            catch (Exception)
-            {
+
+                var k_hook = new KeyboardHook();
+                k_hook.KeyDownEvent += new KeyEventHandler(Hook_KeyDown);//钩住键按下
+                k_hook.Start();//安装键盘钩子
 
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
+
+        private void Hook_KeyDown(object sender, KeyEventArgs e)
+        {
+            //判断按下的键（Alt + A）
+            if (e.KeyValue == (int)Keys.X && (int)Control.ModifierKeys == (int)Keys.Alt)
+            {
+                //截图
+                TakeSnapshot();
+                Console.WriteLine($"{DateTime.Now} : 截图");
+            }
+        }
+
 
         public Bitmap GetScreen()
         {
@@ -143,8 +214,6 @@ namespace MengOCR
             }
             this.PictureSnaped.Image = bmp;
 
-
-
             this.WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -153,9 +222,12 @@ namespace MengOCR
             this.UTextOCRResult.Text = txt;
 
             //保存图片
-            var imgFilename = Path.Combine(SnapSaveDir,
-                $"{DateTime.Now.ToLocalTime().ToString().Replace('/', '-').Replace(':', '.')}.png");
+            var filename = $"{DateTime.Now.ToLocalTime().ToString().Replace('/', '-').Replace(':', '.')}.png";
+            var imgFilename = Path.Combine(SnapSaveDir, filename);
             bmp.Save(imgFilename, System.Drawing.Imaging.ImageFormat.Png);
+
+            ImgFileList.Add(filename);
+
         }
 
         private void TakeSnapshot()
@@ -204,7 +276,7 @@ namespace MengOCR
             try
             {
 
-                var txt = RunOCR<Image>(PictureSnaped.Image);
+                var txt = RunOCR<System.Drawing.Image>(PictureSnaped.Image);
 
                 if (!string.IsNullOrEmpty(txt))
                 {
@@ -222,8 +294,11 @@ namespace MengOCR
         {
             try
             {
-                //切换图片显示
-
+                //切换图片列表，同时切换图片
+                if (UListImagesFiles.SelectedIndex < 0)
+                {
+                    return;
+                }
                 string filename = UListImagesFiles.SelectedItem.ToString();
                 string imgPath = Path.Combine(SnapSaveDir, filename);
 
@@ -236,8 +311,57 @@ namespace MengOCR
             catch (Exception)
             {
 
-                throw;
             }
         }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                NotifyIconOCR.Visible = true;
+                ShowInTaskbar = false;
+            }
+            else
+            {
+                NotifyIconOCR.Visible = false;
+            }
+        }
+
+
+        private void ImgPreview()
+        {
+            try
+            {
+                var w = PictureSnaped.Width;
+                var h = PictureSnaped.Height;
+
+                var iw = PictureSnaped.Image.Height;
+                var ih = PictureSnaped.Image.Width;
+
+                if (iw > w || ih > h)
+                {//图片比窗口大
+                    PictureSnaped.SizeMode = PictureBoxSizeMode.Zoom;
+                    Console.WriteLine("图片比窗口大");
+                }
+                else
+                {//图片比窗口小
+                    PictureSnaped.SizeMode = PictureBoxSizeMode.CenterImage;
+                    Console.WriteLine("图片比窗口小");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void PictureSnaped_LoadCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            ImgPreview();
+
+        }
+
+
     }
 }
