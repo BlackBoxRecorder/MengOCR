@@ -49,6 +49,15 @@
             this.StatAbout = new System.Windows.Forms.ToolStripStatusLabel();
             this.UMainControlBox = new ReaLTaiizor.Controls.DungeonControlBox();
             this.NotifyIconOCR = new System.Windows.Forms.NotifyIcon(this.components);
+            this.HFileListMenu = new ReaLTaiizor.Controls.HopeContextMenuStrip();
+            this.HMenuRename = new System.Windows.Forms.ToolStripMenuItem();
+            this.HMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.dungeonComboBox1 = new ReaLTaiizor.Controls.DungeonComboBox();
+            this.TxtSearchKeyword = new ReaLTaiizor.Controls.DungeonTextBox();
+            this.BtnSearch = new ReaLTaiizor.Controls.DungeonButtonRight();
+            this.HMainMenu = new ReaLTaiizor.Controls.HopeContextMenuStrip();
+            this.新建工作区ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.导出PDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UMainForm.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -63,6 +72,8 @@
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.StatusStripBar.SuspendLayout();
+            this.HFileListMenu.SuspendLayout();
+            this.HMainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // UMainForm
@@ -93,6 +104,7 @@
             this.UMainForm.TabIndex = 0;
             this.UMainForm.Text = "萌萌哒OCR";
             this.UMainForm.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(219)))), ((int)(((byte)(210)))));
+            this.UMainForm.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UMainForm_MouseClick);
             // 
             // panel2
             // 
@@ -133,6 +145,7 @@
             this.UListImagesFiles.Size = new System.Drawing.Size(185, 313);
             this.UListImagesFiles.TabIndex = 0;
             this.UListImagesFiles.SelectedIndexChanged += new System.EventHandler(this.UListImagesFiles_SelectedIndexChanged);
+            this.UListImagesFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UListImagesFiles_MouseDown);
             // 
             // splitContainer2
             // 
@@ -194,9 +207,12 @@
             // 
             // flowLayoutPanel1
             // 
+            this.flowLayoutPanel1.Controls.Add(this.dungeonComboBox1);
             this.flowLayoutPanel1.Controls.Add(this.BtnSnapshot);
             this.flowLayoutPanel1.Controls.Add(this.BtnCopyResultText);
             this.flowLayoutPanel1.Controls.Add(this.BtnRunOCR);
+            this.flowLayoutPanel1.Controls.Add(this.TxtSearchKeyword);
+            this.flowLayoutPanel1.Controls.Add(this.BtnSearch);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -215,7 +231,8 @@
             this.BtnSnapshot.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.BtnSnapshot.InactiveColorA = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(175)))), ((int)(((byte)(143)))));
             this.BtnSnapshot.InactiveColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
-            this.BtnSnapshot.Location = new System.Drawing.Point(3, 3);
+            this.BtnSnapshot.Location = new System.Drawing.Point(196, 3);
+            this.BtnSnapshot.Margin = new System.Windows.Forms.Padding(5, 3, 3, 3);
             this.BtnSnapshot.Name = "BtnSnapshot";
             this.BtnSnapshot.PressedColorA = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
             this.BtnSnapshot.PressedColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
@@ -237,7 +254,7 @@
             this.BtnCopyResultText.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.BtnCopyResultText.InactiveColorA = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(175)))), ((int)(((byte)(143)))));
             this.BtnCopyResultText.InactiveColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
-            this.BtnCopyResultText.Location = new System.Drawing.Point(69, 3);
+            this.BtnCopyResultText.Location = new System.Drawing.Point(262, 3);
             this.BtnCopyResultText.Name = "BtnCopyResultText";
             this.BtnCopyResultText.PressedColorA = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
             this.BtnCopyResultText.PressedColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
@@ -259,7 +276,7 @@
             this.BtnRunOCR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.BtnRunOCR.InactiveColorA = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(175)))), ((int)(((byte)(143)))));
             this.BtnRunOCR.InactiveColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
-            this.BtnRunOCR.Location = new System.Drawing.Point(135, 3);
+            this.BtnRunOCR.Location = new System.Drawing.Point(328, 3);
             this.BtnRunOCR.Name = "BtnRunOCR";
             this.BtnRunOCR.PressedColorA = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
             this.BtnRunOCR.PressedColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
@@ -334,6 +351,121 @@
             this.NotifyIconOCR.Visible = true;
             this.NotifyIconOCR.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIconOCR_MouseClick);
             // 
+            // HFileListMenu
+            // 
+            this.HFileListMenu.BackColor = System.Drawing.Color.White;
+            this.HFileListMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(49)))), ((int)(((byte)(51)))));
+            this.HFileListMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.HMenuRename,
+            this.HMenuDelete});
+            this.HFileListMenu.Name = "HFileListMenu";
+            this.HFileListMenu.Size = new System.Drawing.Size(113, 48);
+            // 
+            // HMenuRename
+            // 
+            this.HMenuRename.Name = "HMenuRename";
+            this.HMenuRename.Size = new System.Drawing.Size(112, 22);
+            this.HMenuRename.Text = "重命名";
+            this.HMenuRename.Click += new System.EventHandler(this.HMenuRename_Click);
+            // 
+            // HMenuDelete
+            // 
+            this.HMenuDelete.Name = "HMenuDelete";
+            this.HMenuDelete.Size = new System.Drawing.Size(112, 22);
+            this.HMenuDelete.Text = "删除";
+            this.HMenuDelete.Click += new System.EventHandler(this.HMenuDelete_Click);
+            // 
+            // dungeonComboBox1
+            // 
+            this.dungeonComboBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.dungeonComboBox1.ColorA = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(132)))), ((int)(((byte)(85)))));
+            this.dungeonComboBox1.ColorB = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(108)))), ((int)(((byte)(57)))));
+            this.dungeonComboBox1.ColorC = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(241)))), ((int)(((byte)(240)))));
+            this.dungeonComboBox1.ColorD = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.dungeonComboBox1.ColorE = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(237)))), ((int)(((byte)(236)))));
+            this.dungeonComboBox1.ColorF = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.dungeonComboBox1.ColorG = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(118)))));
+            this.dungeonComboBox1.ColorH = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(222)))), ((int)(((byte)(220)))));
+            this.dungeonComboBox1.ColorI = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(249)))), ((int)(((byte)(249)))));
+            this.dungeonComboBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.dungeonComboBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.dungeonComboBox1.DropDownHeight = 100;
+            this.dungeonComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.dungeonComboBox1.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.dungeonComboBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(76)))), ((int)(((byte)(97)))));
+            this.dungeonComboBox1.FormattingEnabled = true;
+            this.dungeonComboBox1.HoverSelectionColor = System.Drawing.Color.Empty;
+            this.dungeonComboBox1.IntegralHeight = false;
+            this.dungeonComboBox1.ItemHeight = 24;
+            this.dungeonComboBox1.Location = new System.Drawing.Point(3, 3);
+            this.dungeonComboBox1.Name = "dungeonComboBox1";
+            this.dungeonComboBox1.Size = new System.Drawing.Size(185, 30);
+            this.dungeonComboBox1.StartIndex = 0;
+            this.dungeonComboBox1.TabIndex = 3;
+            // 
+            // TxtSearchKeyword
+            // 
+            this.TxtSearchKeyword.BackColor = System.Drawing.Color.Transparent;
+            this.TxtSearchKeyword.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.TxtSearchKeyword.EdgeColor = System.Drawing.Color.White;
+            this.TxtSearchKeyword.Font = new System.Drawing.Font("Tahoma", 11F);
+            this.TxtSearchKeyword.ForeColor = System.Drawing.Color.DimGray;
+            this.TxtSearchKeyword.Location = new System.Drawing.Point(466, 3);
+            this.TxtSearchKeyword.Margin = new System.Windows.Forms.Padding(75, 3, 3, 3);
+            this.TxtSearchKeyword.MaxLength = 32767;
+            this.TxtSearchKeyword.Multiline = false;
+            this.TxtSearchKeyword.Name = "TxtSearchKeyword";
+            this.TxtSearchKeyword.ReadOnly = false;
+            this.TxtSearchKeyword.Size = new System.Drawing.Size(135, 28);
+            this.TxtSearchKeyword.TabIndex = 5;
+            this.TxtSearchKeyword.Text = "请输入关键字";
+            this.TxtSearchKeyword.TextAlignment = System.Windows.Forms.HorizontalAlignment.Left;
+            this.TxtSearchKeyword.UseSystemPasswordChar = false;
+            // 
+            // BtnSearch
+            // 
+            this.BtnSearch.BackColor = System.Drawing.Color.Transparent;
+            this.BtnSearch.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnSearch.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnSearch.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnSearch.Image = null;
+            this.BtnSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnSearch.InactiveColorA = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(175)))), ((int)(((byte)(143)))));
+            this.BtnSearch.InactiveColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnSearch.Location = new System.Drawing.Point(607, 3);
+            this.BtnSearch.Name = "BtnSearch";
+            this.BtnSearch.PressedColorA = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnSearch.PressedColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnSearch.PressedContourColorA = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnSearch.PressedContourColorB = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnSearch.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.BtnSearch.Size = new System.Drawing.Size(60, 30);
+            this.BtnSearch.TabIndex = 6;
+            this.BtnSearch.Text = "搜索";
+            this.BtnSearch.TextAlignment = System.Drawing.StringAlignment.Center;
+            // 
+            // HMainMenu
+            // 
+            this.HMainMenu.BackColor = System.Drawing.Color.White;
+            this.HMainMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(49)))), ((int)(((byte)(51)))));
+            this.HMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.新建工作区ToolStripMenuItem,
+            this.导出PDFToolStripMenuItem});
+            this.HMainMenu.Name = "HMainMenu";
+            this.HMainMenu.Size = new System.Drawing.Size(137, 48);
+            // 
+            // 新建工作区ToolStripMenuItem
+            // 
+            this.新建工作区ToolStripMenuItem.Name = "新建工作区ToolStripMenuItem";
+            this.新建工作区ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.新建工作区ToolStripMenuItem.Text = "新建工作区";
+            // 
+            // 导出PDFToolStripMenuItem
+            // 
+            this.导出PDFToolStripMenuItem.Name = "导出PDFToolStripMenuItem";
+            this.导出PDFToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.导出PDFToolStripMenuItem.Text = "导出PDF";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -366,6 +498,8 @@
             this.flowLayoutPanel1.ResumeLayout(false);
             this.StatusStripBar.ResumeLayout(false);
             this.StatusStripBar.PerformLayout();
+            this.HFileListMenu.ResumeLayout(false);
+            this.HMainMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -391,6 +525,15 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.NotifyIcon NotifyIconOCR;
         private ReaLTaiizor.Controls.DungeonButtonRight BtnRunOCR;
+        private ReaLTaiizor.Controls.HopeContextMenuStrip HFileListMenu;
+        private System.Windows.Forms.ToolStripMenuItem HMenuRename;
+        private System.Windows.Forms.ToolStripMenuItem HMenuDelete;
+        private ReaLTaiizor.Controls.DungeonComboBox dungeonComboBox1;
+        private ReaLTaiizor.Controls.DungeonTextBox TxtSearchKeyword;
+        private ReaLTaiizor.Controls.DungeonButtonRight BtnSearch;
+        private ReaLTaiizor.Controls.HopeContextMenuStrip HMainMenu;
+        private System.Windows.Forms.ToolStripMenuItem 新建工作区ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 导出PDFToolStripMenuItem;
     }
 }
 

@@ -362,6 +362,80 @@ namespace MengOCR
 
         }
 
+        private void UListImagesFiles_MouseDown(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (e.Button != MouseButtons.Right)
+                {
+                    return;
+                }
 
+                HFileListMenu.Show(UListImagesFiles, new Point(e.X, e.Y));
+
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void HMenuRename_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var selected = UListImagesFiles.SelectedItem.ToString();
+
+                var file = Path.Combine(SnapSaveDir, selected);
+                if (File.Exists(file))
+                {
+                    //TODO 重命名窗口
+                    //var newname = "";
+                    if (false)
+                    {
+                        //File.Move(file, newname);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void HMenuDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var selected = UListImagesFiles.SelectedItem.ToString();
+
+                var file = Path.Combine(SnapSaveDir, selected);
+                if (File.Exists(file))
+                {
+                    var res = MessageBox.Show("确定要删除吗？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                    if (res == DialogResult.OK)
+                    {
+                        File.Delete(file);
+                        //TODO 更新文件列表
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void UMainForm_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                HMainMenu.Show(this, new Point(e.X, e.Y));
+            }
+        }
     }
 }
