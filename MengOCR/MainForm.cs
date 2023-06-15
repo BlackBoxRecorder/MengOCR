@@ -1,4 +1,5 @@
-﻿using PaddleOCRSharp;
+﻿using MengOCR.Forms;
+using PaddleOCRSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -55,9 +56,6 @@ namespace MengOCR
             TakeSnapshot();
         }
 
-        /// <summary>
-        /// 初始化文件变化监听
-        /// </summary>
         private void OnFsChanges()
         {
             FsWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime;
@@ -201,7 +199,7 @@ namespace MengOCR
             return bmp;
         }
 
-        private void ScreenShotOk_Click(object sender, EventArgs e)
+        private async void ScreenShotOk_Click(object sender, EventArgs e)
         {
             Bitmap bmp = new Bitmap(snapForm.End.X - snapForm.Start.X, snapForm.End.Y - snapForm.Start.Y);
             using (Graphics g = Graphics.FromImage(bmp))
@@ -227,6 +225,18 @@ namespace MengOCR
             bmp.Save(imgFilename, System.Drawing.Imaging.ImageFormat.Png);
 
             ImgFileList.Add(filename);
+
+            var item = new OcrDataItem()
+            {
+                CreateTime = DateTime.Now,
+                ContentTxt = txt,
+                ImgFileName = imgFilename,
+                WorkspaceName = CmbWorkspace.Name,
+
+            };
+
+            await StoreData.Instance.AddOCRItemAsync(item);
+
 
         }
 
@@ -436,6 +446,46 @@ namespace MengOCR
             {
                 HMainMenu.Show(this, new Point(e.X, e.Y));
             }
+        }
+
+        private void HMainMenuExportPdf_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private async void HMainMenuNewWorkspace_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //添加工作区窗口
+
+                var form = new AddWorkspaceForm();
+
+                form.ShowDialog();
+                var name = form.TxtWorkspaceName.Text;
+
+                await StoreData.Instance.AddWorkspaceAsync(name);
+
+                // TODO 重载工作区列表
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void CmbWorkspace_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
