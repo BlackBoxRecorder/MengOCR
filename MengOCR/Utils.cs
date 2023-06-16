@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -41,7 +42,7 @@ namespace MengOCR
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static byte[] GetImageByPath(string filePath)
+        public static byte[] GetImageByteByPath(string filePath)
         {
             byte[] buffer = null;
             try
@@ -61,6 +62,7 @@ namespace MengOCR
             }
             return buffer;
         }
+
 
 
         public static bool IsFileInUse(string fileName)
@@ -89,7 +91,19 @@ namespace MengOCR
             return inUse;//true表示正在使用,false没有使用
         }
 
+        public static Image GetImageByPath(string path)
+        {
+            try
+            {
+                return Image.FromFile(path);
+            }
+            catch (Exception)
+            {
 
+            }
+
+            return null;
+        }
 
 
     }

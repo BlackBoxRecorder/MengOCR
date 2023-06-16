@@ -31,6 +31,20 @@ namespace MengOCR
             await collection.InsertOneAsync(space);
         }
 
+
+        public List<Workspace> GetWorkspaceAsync()
+        {
+            var collection = store.GetCollection<Workspace>();
+            return collection.AsQueryable().ToList();
+        }
+
+        public List<Workspace> DeleteWorkspaceAsync(string name)
+        {
+            var collection = store.GetCollection<Workspace>();
+            return collection.AsQueryable().ToList();
+        }
+
+
         public List<OcrDataItem> SearchAsync(string keyword)
         {
             var collection = store.GetCollection<OcrDataItem>();

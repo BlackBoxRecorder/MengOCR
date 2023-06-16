@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ReaLTaiizor.Drawing.Poison.PoisonPaint.ForeColor;
 using static System.Net.Mime.MediaTypeNames;
+using Image = System.Drawing.Image;
 
 namespace MengOCR
 {
@@ -93,7 +94,7 @@ namespace MengOCR
             StatTotalFileNum.Text = $"共{UListImagesFiles.Items.Count}个图片";
         }
 
-        private string RunOCR<T>(T img)
+        private string RunOCR(Image img)
         {
             int success = 0;
             string result = "";
@@ -101,22 +102,11 @@ namespace MengOCR
             {
                 try
                 {
-                    if (typeof(T) == typeof(string))
-                    {
-                        OCRResult ocrResult = engine.DetectText(img as string) ??
-                            throw new Exception("识别出错了！！！");
-                        result = ocrResult.Text;
-                    }
-                    else if (typeof(T) == typeof(System.Drawing.Image))
-                    {
-                        OCRResult ocrResult = engine.DetectText(img as System.Drawing.Image) ??
-                            throw new Exception("识别出错了！！！");
-                        result = ocrResult.Text;
-                    }
-                    else
-                    {
-                        result = "出错了！！！";
-                    }
+
+                    OCRResult ocrResult = engine.DetectText(img as System.Drawing.Image) ??
+                        throw new Exception("识别出错了！！！");
+                    result = ocrResult.Text;
+
 
                     StatWordCount.Text = $"共识别{result.Length}个字";
 
@@ -164,6 +154,8 @@ namespace MengOCR
 
                 }
 
+                ReloadWorkspace();
+                CmbWorkspace.SelectedIndex = 0;
                 var k_hook = new KeyboardHook();
                 k_hook.KeyDownEvent += new KeyEventHandler(Hook_KeyDown);//钩住键按下
                 k_hook.Start();//安装键盘钩子
@@ -286,7 +278,7 @@ namespace MengOCR
             try
             {
 
-                var txt = RunOCR<System.Drawing.Image>(PictureSnaped.Image);
+                var txt = RunOCR(PictureSnaped.Image);
 
                 if (!string.IsNullOrEmpty(txt))
                 {
@@ -475,6 +467,7 @@ namespace MengOCR
                 await StoreData.Instance.AddWorkspaceAsync(name);
 
                 // TODO 重载工作区列表
+                ReloadWorkspace();
             }
             catch (Exception)
             {
@@ -487,5 +480,31 @@ namespace MengOCR
         {
 
         }
+
+        /// <summary>
+        /// 从store重新加载工作区到下拉列表
+        /// </summary>
+        private void ReloadWorkspace()
+        {
+            try
+            {
+                var spaces = StoreData.Instance.GetWorkspaceAsync();
+
+                CmbWorkspace.Items.Clear();
+
+                foreach (var item in spaces)
+                {
+                    CmbWorkspace.Items.Add(item.Name);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+
     }
 }
