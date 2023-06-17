@@ -19,6 +19,30 @@ namespace MengOCR
             store = new DataStore("meng-ocr.json");
         }
 
+
+        public async Task InitWorkspace()
+        {
+            var collection = store.GetCollection<Workspace>();
+            const string name = "默认工作区";
+            var exist = collection.Find(w => w.Name == name);
+
+            if (exist.Count() > 0)
+            {
+                return;
+            }
+
+            //初始化默认工作区
+            await AddWorkspaceAsync(name);
+        }
+
+
+        public List<Workspace> GetConfig()
+        {
+            var collection = store.GetCollection<Workspace>();
+            return collection.AsQueryable().ToList();
+        }
+
+
         public async Task AddWorkspaceAsync(string name)
         {
             var collection = store.GetCollection<Workspace>();
@@ -80,7 +104,10 @@ namespace MengOCR
 
     }
 
-
+    public class AppConfig
+    {
+        public string KeyVal { get; set; }
+    }
 
     public class Workspace
     {

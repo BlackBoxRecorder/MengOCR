@@ -135,7 +135,7 @@ namespace MengOCR
             engine.Dispose();
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
             try
             {
@@ -154,8 +154,12 @@ namespace MengOCR
 
                 }
 
+
+                await StoreData.Instance.InitWorkspace();
+
                 ReloadWorkspace();
                 CmbWorkspace.SelectedIndex = 0;
+
                 var k_hook = new KeyboardHook();
                 k_hook.KeyDownEvent += new KeyEventHandler(Hook_KeyDown);//钩住键按下
                 k_hook.Start();//安装键盘钩子
@@ -193,42 +197,57 @@ namespace MengOCR
 
         private async void ScreenShotOk_Click(object sender, EventArgs e)
         {
-            Bitmap bmp = new Bitmap(snapForm.End.X - snapForm.Start.X, snapForm.End.Y - snapForm.Start.Y);
-            using (Graphics g = Graphics.FromImage(bmp))
+            try
             {
-                int w = snapForm.End.X - snapForm.Start.X;
-                int h = snapForm.End.Y - snapForm.Start.Y;
-                Rectangle destRect = new Rectangle(0, 0, w + 1, h + 1);//在画布上要显示的区域（记得像素加1）
-                Rectangle srcRect = new Rectangle(snapForm.Start.X, snapForm.Start.Y, w + 1, h + 1);//图像上要截取的区域
-                g.DrawImage(curBitmap, destRect, srcRect, GraphicsUnit.Pixel);//加图像绘制到画布上
+                Bitmap bmp = new Bitmap(snapForm.End.X - snapForm.Start.X, snapForm.End.Y - snapForm.Start.Y);
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    int w = snapForm.End.X - snapForm.Start.X;
+                    int h = snapForm.End.Y - snapForm.Start.Y;
+                    Rectangle destRect = new Rectangle(0, 0, w + 1, h + 1);//在画布上要显示的区域（记得像素加1）
+                    Rectangle srcRect = new Rectangle(snapForm.Start.X, snapForm.Start.Y, w + 1, h + 1);//图像上要截取的区域
+                    g.DrawImage(curBitmap, destRect, srcRect, GraphicsUnit.Pixel);//加图像绘制到画布上
+                }
+                this.PictureSnaped.Image = bmp;
+
+                this.WindowState = FormWindowState.Normal;
+                this.ShowInTaskbar = true;
+                this.StartPosition = FormStartPosition.CenterScreen;
+                this.Show();
+                var txt = this.RunOCR(this.PictureSnaped.Image);
+                this.UTextOCRResult.Text = txt;
+
+                //保存图片
+                var filename = $"{DateTime.Now.ToLocalTime().ToString().Replace('/', '-').Replace(':', '.')}.png";
+                var idx = CmbWorkspace.SelectedIndex;
+                var space = CmbWorkspace.Items[idx].ToString();
+
+                var spaceDir = Path.Combine(SnapSaveDir, space);
+                if (!Directory.Exists(spaceDir))
+                {
+                    Directory.CreateDirectory(spaceDir);
+                }
+
+                var imgFilename = Path.Combine(spaceDir, filename);
+                bmp.Save(imgFilename, System.Drawing.Imaging.ImageFormat.Png);
+
+                ImgFileList.Add(filename);
+
+                var item = new OcrDataItem()
+                {
+                    CreateTime = DateTime.Now,
+                    ContentTxt = txt,
+                    ImgFileName = imgFilename,
+                    WorkspaceName = CmbWorkspace.Name,
+
+                };
+
+                await StoreData.Instance.AddOCRItemAsync(item);
             }
-            this.PictureSnaped.Image = bmp;
-
-            this.WindowState = FormWindowState.Normal;
-            this.ShowInTaskbar = true;
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.Show();
-            var txt = this.RunOCR(this.PictureSnaped.Image);
-            this.UTextOCRResult.Text = txt;
-
-            //保存图片
-            var filename = $"{DateTime.Now.ToLocalTime().ToString().Replace('/', '-').Replace(':', '.')}.png";
-            var imgFilename = Path.Combine(SnapSaveDir, filename);
-            bmp.Save(imgFilename, System.Drawing.Imaging.ImageFormat.Png);
-
-            ImgFileList.Add(filename);
-
-            var item = new OcrDataItem()
+            catch (Exception)
             {
-                CreateTime = DateTime.Now,
-                ContentTxt = txt,
-                ImgFileName = imgFilename,
-                WorkspaceName = CmbWorkspace.Name,
 
-            };
-
-            await StoreData.Instance.AddOCRItemAsync(item);
-
+            }
 
         }
 
@@ -478,7 +497,11 @@ namespace MengOCR
 
         private void CmbWorkspace_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (CmbWorkspace.SelectedIndex < 0)
+            {
+                return;
+            }
+            ReloadFileList();
         }
 
         /// <summary>
@@ -504,7 +527,31 @@ namespace MengOCR
             }
         }
 
+        /// <summary>
+        /// 重新加载文件列表，切换工作区后重新加载
+        /// </summary>
+        private void ReloadFileList()
+        {
+            try
+            {
+                var space = CmbWorkspace.SelectedText;
+                var dir = Path.Combine(SnapSaveDir, space);
 
+                UListImagesFiles.Items.Clear();
+
+                var files = Directory.GetFiles(dir);
+
+                foreach (var file in files)
+                {
+                    var fi = new FileInfo(file);
+                    UListImagesFiles.Items.Insert(0, fi.Name);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
 
     }
 }
