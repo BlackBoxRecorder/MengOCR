@@ -57,8 +57,8 @@
             this.HMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.HMainMenu = new ReaLTaiizor.Controls.HopeContextMenuStrip();
             this.HMainMenuNewWorkspace = new System.Windows.Forms.ToolStripMenuItem();
-            this.HMainMenuExportPdf = new System.Windows.Forms.ToolStripMenuItem();
             this.删除工作区ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.HMainMenuExportPdf = new System.Windows.Forms.ToolStripMenuItem();
             this.UMainForm.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -358,6 +358,7 @@
             this.BtnSearch.TabIndex = 6;
             this.BtnSearch.Text = "搜索";
             this.BtnSearch.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.BtnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
             // 
             // StatusStripBar
             // 
@@ -464,18 +465,18 @@
             this.HMainMenuNewWorkspace.Text = "新建工作区";
             this.HMainMenuNewWorkspace.Click += new System.EventHandler(this.HMainMenuNewWorkspace_Click);
             // 
+            // 删除工作区ToolStripMenuItem
+            // 
+            this.删除工作区ToolStripMenuItem.Name = "删除工作区ToolStripMenuItem";
+            this.删除工作区ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.删除工作区ToolStripMenuItem.Text = "删除工作区";
+            // 
             // HMainMenuExportPdf
             // 
             this.HMainMenuExportPdf.Name = "HMainMenuExportPdf";
             this.HMainMenuExportPdf.Size = new System.Drawing.Size(136, 22);
             this.HMainMenuExportPdf.Text = "导出PDF";
             this.HMainMenuExportPdf.Click += new System.EventHandler(this.HMainMenuExportPdf_Click);
-            // 
-            // 删除工作区ToolStripMenuItem
-            // 
-            this.删除工作区ToolStripMenuItem.Name = "删除工作区ToolStripMenuItem";
-            this.删除工作区ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
-            this.删除工作区ToolStripMenuItem.Text = "删除工作区";
             // 
             // MainForm
             // 

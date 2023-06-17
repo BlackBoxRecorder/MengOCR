@@ -553,5 +553,30 @@ namespace MengOCR
             }
         }
 
+        private void BtnSearch_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var keyword = TxtSearchKeyword.Text;
+                if (string.IsNullOrEmpty(keyword)) { return; }
+
+                var items = StoreData.Instance.SearchAsync(keyword);
+
+                CmbWorkspace.SelectedIndex = 0;
+                UListImagesFiles.Items.Clear();
+
+                foreach (var item in items)
+                {
+                    var fi = new FileInfo(item.ImgFileName);
+                    UListImagesFiles.Items.Add(fi.Name);
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+            }
+        }
     }
 }
