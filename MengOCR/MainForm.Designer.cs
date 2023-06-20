@@ -33,7 +33,6 @@
             this.UMainForm = new ReaLTaiizor.Forms.DungeonForm();
             this.panel2 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.UListImagesFiles = new ReaLTaiizor.Controls.DungeonListBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.UTextOCRResult = new ReaLTaiizor.Controls.DungeonRichTextBox();
             this.PictureSnaped = new System.Windows.Forms.PictureBox();
@@ -59,6 +58,7 @@
             this.HMainMenuNewWorkspace = new System.Windows.Forms.ToolStripMenuItem();
             this.删除工作区ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HMainMenuExportPdf = new System.Windows.Forms.ToolStripMenuItem();
+            this.UListImagesFiles = new System.Windows.Forms.ListBox();
             this.UMainForm.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -132,21 +132,6 @@
             this.splitContainer1.Size = new System.Drawing.Size(760, 313);
             this.splitContainer1.SplitterDistance = 185;
             this.splitContainer1.TabIndex = 0;
-            // 
-            // UListImagesFiles
-            // 
-            this.UListImagesFiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.UListImagesFiles.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.UListImagesFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.UListImagesFiles.FormattingEnabled = true;
-            this.UListImagesFiles.IntegralHeight = false;
-            this.UListImagesFiles.ItemHeight = 18;
-            this.UListImagesFiles.Location = new System.Drawing.Point(0, 0);
-            this.UListImagesFiles.Name = "UListImagesFiles";
-            this.UListImagesFiles.Size = new System.Drawing.Size(185, 313);
-            this.UListImagesFiles.TabIndex = 0;
-            this.UListImagesFiles.SelectedIndexChanged += new System.EventHandler(this.UListImagesFiles_SelectedIndexChanged);
-            this.UListImagesFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UListImagesFiles_MouseDown);
             // 
             // splitContainer2
             // 
@@ -478,6 +463,18 @@
             this.HMainMenuExportPdf.Text = "导出PDF";
             this.HMainMenuExportPdf.Click += new System.EventHandler(this.HMainMenuExportPdf_Click);
             // 
+            // UListImagesFiles
+            // 
+            this.UListImagesFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UListImagesFiles.FormattingEnabled = true;
+            this.UListImagesFiles.ItemHeight = 15;
+            this.UListImagesFiles.Location = new System.Drawing.Point(0, 0);
+            this.UListImagesFiles.Name = "UListImagesFiles";
+            this.UListImagesFiles.Size = new System.Drawing.Size(185, 313);
+            this.UListImagesFiles.TabIndex = 0;
+            this.UListImagesFiles.SelectedIndexChanged += new System.EventHandler(this.UListImagesFiles_SelectedIndexChanged);
+            this.UListImagesFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UListImagesFiles_MouseDown);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -522,7 +519,6 @@
         private ReaLTaiizor.Controls.DungeonControlBox UMainControlBox;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private ReaLTaiizor.Controls.DungeonListBox UListImagesFiles;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.StatusStrip StatusStripBar;
         private System.Windows.Forms.SplitContainer splitContainer2;
@@ -547,6 +543,7 @@
         private System.Windows.Forms.ToolStripMenuItem HMainMenuNewWorkspace;
         private System.Windows.Forms.ToolStripMenuItem HMainMenuExportPdf;
         private System.Windows.Forms.ToolStripMenuItem 删除工作区ToolStripMenuItem;
+        private System.Windows.Forms.ListBox UListImagesFiles;
     }
 }
 
