@@ -28,90 +28,116 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.FAddWorkspaceForm = new ReaLTaiizor.Forms.ForeverForm();
-            this.TxtWorkspaceName = new ReaLTaiizor.Controls.ForeverTextBox();
-            this.FBtnClose = new ReaLTaiizor.Controls.ForeverButton();
-            this.FAddWorkspaceForm.SuspendLayout();
+            this.DAddWorkspaceForm = new ReaLTaiizor.Forms.DungeonForm();
+            this.TxtWorkspaceName = new ReaLTaiizor.Controls.DungeonTextBox();
+            this.BtnOK = new ReaLTaiizor.Controls.DungeonButtonRight();
+            this.dungeonControlBox1 = new ReaLTaiizor.Controls.DungeonControlBox();
+            this.DAddWorkspaceForm.SuspendLayout();
             this.SuspendLayout();
             // 
-            // FAddWorkspaceForm
+            // DAddWorkspaceForm
             // 
-            this.FAddWorkspaceForm.BackColor = System.Drawing.Color.White;
-            this.FAddWorkspaceForm.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
-            this.FAddWorkspaceForm.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.FAddWorkspaceForm.Controls.Add(this.FBtnClose);
-            this.FAddWorkspaceForm.Controls.Add(this.TxtWorkspaceName);
-            this.FAddWorkspaceForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FAddWorkspaceForm.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.FAddWorkspaceForm.ForeverColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(168)))), ((int)(((byte)(109)))));
-            this.FAddWorkspaceForm.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(47)))), ((int)(((byte)(49)))));
-            this.FAddWorkspaceForm.HeaderMaximize = false;
-            this.FAddWorkspaceForm.HeaderTextFont = new System.Drawing.Font("Segoe UI", 12F);
-            this.FAddWorkspaceForm.Image = null;
-            this.FAddWorkspaceForm.Location = new System.Drawing.Point(0, 0);
-            this.FAddWorkspaceForm.MinimumSize = new System.Drawing.Size(210, 50);
-            this.FAddWorkspaceForm.Name = "FAddWorkspaceForm";
-            this.FAddWorkspaceForm.Padding = new System.Windows.Forms.Padding(1, 51, 1, 1);
-            this.FAddWorkspaceForm.Sizable = false;
-            this.FAddWorkspaceForm.Size = new System.Drawing.Size(400, 200);
-            this.FAddWorkspaceForm.TabIndex = 0;
-            this.FAddWorkspaceForm.Text = "添加工作区";
-            this.FAddWorkspaceForm.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
-            this.FAddWorkspaceForm.TextLight = System.Drawing.Color.SeaGreen;
+            this.DAddWorkspaceForm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(241)))), ((int)(((byte)(243)))));
+            this.DAddWorkspaceForm.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
+            this.DAddWorkspaceForm.Controls.Add(this.dungeonControlBox1);
+            this.DAddWorkspaceForm.Controls.Add(this.BtnOK);
+            this.DAddWorkspaceForm.Controls.Add(this.TxtWorkspaceName);
+            this.DAddWorkspaceForm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DAddWorkspaceForm.FillEdgeColorA = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(68)))), ((int)(((byte)(63)))));
+            this.DAddWorkspaceForm.FillEdgeColorB = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(68)))), ((int)(((byte)(63)))));
+            this.DAddWorkspaceForm.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.DAddWorkspaceForm.FooterEdgeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(68)))), ((int)(((byte)(63)))));
+            this.DAddWorkspaceForm.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(219)))), ((int)(((byte)(210)))));
+            this.DAddWorkspaceForm.HeaderEdgeColorA = System.Drawing.Color.FromArgb(((int)(((byte)(87)))), ((int)(((byte)(85)))), ((int)(((byte)(77)))));
+            this.DAddWorkspaceForm.HeaderEdgeColorB = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(68)))), ((int)(((byte)(63)))));
+            this.DAddWorkspaceForm.Location = new System.Drawing.Point(0, 0);
+            this.DAddWorkspaceForm.Name = "DAddWorkspaceForm";
+            this.DAddWorkspaceForm.Padding = new System.Windows.Forms.Padding(20, 56, 20, 16);
+            this.DAddWorkspaceForm.RoundCorners = true;
+            this.DAddWorkspaceForm.Sizable = false;
+            this.DAddWorkspaceForm.Size = new System.Drawing.Size(400, 200);
+            this.DAddWorkspaceForm.SmartBounds = true;
+            this.DAddWorkspaceForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.DAddWorkspaceForm.TabIndex = 0;
+            this.DAddWorkspaceForm.Text = "添加工作区";
+            this.DAddWorkspaceForm.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(219)))), ((int)(((byte)(210)))));
             // 
             // TxtWorkspaceName
             // 
             this.TxtWorkspaceName.BackColor = System.Drawing.Color.Transparent;
-            this.TxtWorkspaceName.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(47)))), ((int)(((byte)(49)))));
-            this.TxtWorkspaceName.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(168)))), ((int)(((byte)(109)))));
-            this.TxtWorkspaceName.FocusOnHover = false;
-            this.TxtWorkspaceName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.TxtWorkspaceName.Location = new System.Drawing.Point(101, 77);
+            this.TxtWorkspaceName.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.TxtWorkspaceName.EdgeColor = System.Drawing.Color.White;
+            this.TxtWorkspaceName.Font = new System.Drawing.Font("Tahoma", 11F);
+            this.TxtWorkspaceName.ForeColor = System.Drawing.Color.DimGray;
+            this.TxtWorkspaceName.Location = new System.Drawing.Point(77, 90);
             this.TxtWorkspaceName.MaxLength = 32767;
             this.TxtWorkspaceName.Multiline = false;
             this.TxtWorkspaceName.Name = "TxtWorkspaceName";
             this.TxtWorkspaceName.ReadOnly = false;
-            this.TxtWorkspaceName.Size = new System.Drawing.Size(199, 29);
+            this.TxtWorkspaceName.Size = new System.Drawing.Size(157, 28);
             this.TxtWorkspaceName.TabIndex = 0;
-            this.TxtWorkspaceName.Text = "工作区名称";
-            this.TxtWorkspaceName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TxtWorkspaceName.TextAlignment = System.Windows.Forms.HorizontalAlignment.Center;
             this.TxtWorkspaceName.UseSystemPasswordChar = false;
             // 
-            // FBtnClose
+            // BtnOK
             // 
-            this.FBtnClose.BackColor = System.Drawing.Color.Transparent;
-            this.FBtnClose.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(168)))), ((int)(((byte)(109)))));
-            this.FBtnClose.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.FBtnClose.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.FBtnClose.Location = new System.Drawing.Point(164, 134);
-            this.FBtnClose.Name = "FBtnClose";
-            this.FBtnClose.Rounded = false;
-            this.FBtnClose.Size = new System.Drawing.Size(60, 30);
-            this.FBtnClose.TabIndex = 1;
-            this.FBtnClose.Text = "添加";
-            this.FBtnClose.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(243)))), ((int)(((byte)(243)))));
-            this.FBtnClose.Click += new System.EventHandler(this.FBtnClose_Click);
+            this.BtnOK.BackColor = System.Drawing.Color.Transparent;
+            this.BtnOK.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnOK.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnOK.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnOK.Image = null;
+            this.BtnOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnOK.InactiveColorA = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(175)))), ((int)(((byte)(143)))));
+            this.BtnOK.InactiveColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnOK.Location = new System.Drawing.Point(255, 88);
+            this.BtnOK.Name = "BtnOK";
+            this.BtnOK.PressedColorA = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnOK.PressedColorB = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(146)))), ((int)(((byte)(106)))));
+            this.BtnOK.PressedContourColorA = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnOK.PressedContourColorB = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(120)))), ((int)(((byte)(101)))));
+            this.BtnOK.Size = new System.Drawing.Size(60, 30);
+            this.BtnOK.TabIndex = 1;
+            this.BtnOK.Text = "确定";
+            this.BtnOK.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.BtnOK.Click += new System.EventHandler(this.BtnOK_Click);
+            // 
+            // dungeonControlBox1
+            // 
+            this.dungeonControlBox1.BackColor = System.Drawing.Color.Transparent;
+            this.dungeonControlBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.dungeonControlBox1.DefaultLocation = true;
+            this.dungeonControlBox1.EnableMaximize = true;
+            this.dungeonControlBox1.EnableMinimize = true;
+            this.dungeonControlBox1.Font = new System.Drawing.Font("Marlett", 7F);
+            this.dungeonControlBox1.Location = new System.Drawing.Point(11, 12);
+            this.dungeonControlBox1.Name = "dungeonControlBox1";
+            this.dungeonControlBox1.Size = new System.Drawing.Size(64, 22);
+            this.dungeonControlBox1.TabIndex = 2;
+            this.dungeonControlBox1.Text = "dungeonControlBox1";
             // 
             // AddWorkspaceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(400, 200);
-            this.Controls.Add(this.FAddWorkspaceForm);
+            this.Controls.Add(this.DAddWorkspaceForm);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MinimumSize = new System.Drawing.Size(261, 65);
             this.Name = "AddWorkspaceForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "AddWorkspaceForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "添加工作区";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
-            this.FAddWorkspaceForm.ResumeLayout(false);
+            this.Load += new System.EventHandler(this.AddWorkspaceForm_Load);
+            this.DAddWorkspaceForm.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private ReaLTaiizor.Forms.ForeverForm FAddWorkspaceForm;
-        private ReaLTaiizor.Controls.ForeverButton FBtnClose;
-        public ReaLTaiizor.Controls.ForeverTextBox TxtWorkspaceName;
+        private ReaLTaiizor.Forms.DungeonForm DAddWorkspaceForm;
+        private ReaLTaiizor.Controls.DungeonControlBox dungeonControlBox1;
+        private ReaLTaiizor.Controls.DungeonButtonRight BtnOK;
+        public ReaLTaiizor.Controls.DungeonTextBox TxtWorkspaceName;
     }
 }

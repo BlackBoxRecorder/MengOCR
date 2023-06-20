@@ -321,7 +321,9 @@ namespace MengOCR
                     return;
                 }
                 string filename = UListImagesFiles.SelectedItem.ToString();
-                string imgPath = Path.Combine(SnapSaveDir, filename);
+                var idx = CmbWorkspace.SelectedIndex;
+                var spaceDir = CmbWorkspace.Items[idx].ToString();
+                string imgPath = Path.Combine(SnapSaveDir, spaceDir, filename);
 
                 if (File.Exists(imgPath))
                 {
@@ -431,9 +433,13 @@ namespace MengOCR
         {
             try
             {
-                var selected = UListImagesFiles.SelectedItem.ToString();
+                var idx = UListImagesFiles.SelectedIndex;
+                var selected = UListImagesFiles.Items[idx].ToString();
 
-                var file = Path.Combine(SnapSaveDir, selected);
+                var spaceIdx = CmbWorkspace.SelectedIndex;
+                var space = CmbWorkspace.Items[spaceIdx].ToString();
+
+                var file = Path.Combine(SnapSaveDir, space, selected);
                 if (File.Exists(file))
                 {
                     var res = MessageBox.Show("确定要删除吗？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
@@ -441,6 +447,8 @@ namespace MengOCR
                     {
                         File.Delete(file);
                         //TODO 更新文件列表
+
+                        ReloadFileList();
                     }
                 }
 
@@ -476,22 +484,18 @@ namespace MengOCR
         {
             try
             {
-                //添加工作区窗口
-
                 var form = new AddWorkspaceForm();
-
-                form.ShowDialog();
+                form.ShowDialog(this);
                 var name = form.TxtWorkspaceName.Text;
 
                 await StoreData.Instance.AddWorkspaceAsync(name);
 
-                // TODO 重载工作区列表
+                // 重载工作区列表
                 ReloadWorkspace();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -528,14 +532,16 @@ namespace MengOCR
         }
 
         /// <summary>
-        /// 重新加载文件列表，切换工作区后重新加载
+        /// 重新加载文件列表
+        /// 切换工作区后, 删除文件后
         /// </summary>
         private void ReloadFileList()
         {
             try
             {
-                var space = CmbWorkspace.SelectedText;
-                var dir = Path.Combine(SnapSaveDir, space);
+                var idx = CmbWorkspace.SelectedIndex;
+                var spaceDir = CmbWorkspace.Items[idx].ToString();
+                var dir = Path.Combine(SnapSaveDir, spaceDir);
 
                 UListImagesFiles.Items.Clear();
 
@@ -547,9 +553,9 @@ namespace MengOCR
                     UListImagesFiles.Items.Insert(0, fi.Name);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -570,8 +576,6 @@ namespace MengOCR
                     var fi = new FileInfo(item.ImgFileName);
                     UListImagesFiles.Items.Add(fi.Name);
                 }
-
-
             }
             catch (Exception)
             {
