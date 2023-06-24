@@ -21,6 +21,8 @@ namespace MengOCR.Forms
         public InputForm()
         {
             InitializeComponent();
+
+            StartPosition = FormStartPosition.CenterParent;
         }
 
         private void InputForm_Load(object sender, EventArgs e)

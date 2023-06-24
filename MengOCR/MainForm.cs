@@ -28,6 +28,8 @@ namespace MengOCR
         {
             InitializeComponent();
 
+            StartPosition = FormStartPosition.CenterScreen;
+
             //使用默认中英文V3模型
             OCRModelConfig config = null;
             //使用默认参数
@@ -232,7 +234,7 @@ namespace MengOCR
         /// <summary>
         /// 从store重新加载工作区到下拉列表
         /// </summary>
-        private void ReloadWorkspace()
+        private void ReloadWorkspace(string selectedSpace = "")
         {
             try
             {
@@ -245,9 +247,15 @@ namespace MengOCR
                     CmbWorkspace.Items.Add(item.Name);
                 }
 
-                if (CmbWorkspace.Items.Count > 0)
+
+                if (CmbWorkspace.Items.Count > 0 && !CmbWorkspace.Items.Contains(selectedSpace))
                 {
                     CmbWorkspace.SelectedIndex = 0;
+                }
+                else
+                {
+                    var idx = CmbWorkspace.Items.IndexOf(selectedSpace);
+                    CmbWorkspace.SelectedIndex = idx;
                 }
             }
             catch (Exception ex)
@@ -492,12 +500,16 @@ namespace MengOCR
             try
             {
                 var inputform = new InputForm();
+                inputform.Text = "添加工作区";
                 inputform.ShowDialog(this);
                 var newspace = inputform.NewValue;
-
+                if (string.IsNullOrEmpty(newspace))
+                {
+                    return;
+                }
                 await StoreData.Instance.AddWorkspaceAsync(newspace);
 
-                ReloadWorkspace();
+                ReloadWorkspace(newspace);
 
             }
             catch (Exception ex)
@@ -506,7 +518,7 @@ namespace MengOCR
             }
         }
 
-        private void MenuRenameWorkSpace_Click(object sender, EventArgs e)
+        private async void MenuRenameWorkSpace_Click(object sender, EventArgs e)
         {
             try
             {
@@ -514,14 +526,36 @@ namespace MengOCR
                 var space = GetSelectedWorkspace();
 
                 var source = Path.Combine(SnapSaveDir, space);
-
+                var form = new InputForm();
+                form.Text = "工作区重命名";
+                form.OldValue = space;
+                form.ShowDialog(this);
+                var newspace = form.NewValue;
+                if (string.IsNullOrEmpty(newspace))
+                {
+                    return;
+                }
+                var dist = Path.Combine(SnapSaveDir, newspace);
                 //修改目录名称
-
+                if (Directory.Exists(source))
+                {
+                    Directory.Move(source, dist);
+                }
 
                 //修改Store中的工作区名称
 
+                var items = StoreData.Instance.GetOCRItemsByWorkspace(space);
 
+                foreach (var item in items)
+                {
+                    item.WorkspaceName = newspace;
+                    await StoreData.Instance.UpdateOCRItemAsync(item);
+                }
+
+                StoreData.Instance.DeleteWorkspaceAsync(space);
+                await StoreData.Instance.AddWorkspaceAsync(newspace);
                 //重新加载工作区
+                ReloadWorkspace(newspace);
             }
             catch (Exception ex)
             {
@@ -566,6 +600,7 @@ namespace MengOCR
                     var oldname = item.ImgFileName;
                     //重命名窗体
                     var form = new InputForm();
+                    form.Text = "文件重命名";
                     form.OldValue = oldname;
                     form.ShowDialog(this);
                     var newname = form.NewValue;
