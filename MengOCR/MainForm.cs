@@ -17,7 +17,7 @@ namespace MengOCR
 {
     public partial class MainForm : Form
     {
-        public static readonly Logger logger = LogManager.GetLogger("Program");
+        public static readonly Logger logger = LogManager.GetLogger("MainForm");
 
 
         private readonly FileSystemWatcher FsWatcher = new FileSystemWatcher();
@@ -64,13 +64,7 @@ namespace MengOCR
                 Directory.CreateDirectory(SnapSaveDir);
             }
 
-
-
             OnFsChanges();
-
-
-
-
         }
 
         private void OnFsChanges()
