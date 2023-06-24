@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.6.33723.286
+VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MengOCR", "MengOCR\MengOCR.csproj", "{FB18BFFD-D359-4F3D-A618-FCC1E6D94B14}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MengOCR", "MengOCR\MengOCR.csproj", "{D5C29D39-536A-408F-8553-7579BD053EFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,19 +13,19 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FB18BFFD-D359-4F3D-A618-FCC1E6D94B14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB18BFFD-D359-4F3D-A618-FCC1E6D94B14}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB18BFFD-D359-4F3D-A618-FCC1E6D94B14}.Debug|x64.ActiveCfg = Debug|x64
-		{FB18BFFD-D359-4F3D-A618-FCC1E6D94B14}.Debug|x64.Build.0 = Debug|x64
-		{FB18BFFD-D359-4F3D-A618-FCC1E6D94B14}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB18BFFD-D359-4F3D-A618-FCC1E6D94B14}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB18BFFD-D359-4F3D-A618-FCC1E6D94B14}.Release|x64.ActiveCfg = Release|x64
-		{FB18BFFD-D359-4F3D-A618-FCC1E6D94B14}.Release|x64.Build.0 = Release|x64
+		{D5C29D39-536A-408F-8553-7579BD053EFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5C29D39-536A-408F-8553-7579BD053EFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5C29D39-536A-408F-8553-7579BD053EFA}.Debug|x64.ActiveCfg = Debug|x64
+		{D5C29D39-536A-408F-8553-7579BD053EFA}.Debug|x64.Build.0 = Debug|x64
+		{D5C29D39-536A-408F-8553-7579BD053EFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5C29D39-536A-408F-8553-7579BD053EFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5C29D39-536A-408F-8553-7579BD053EFA}.Release|x64.ActiveCfg = Release|x64
+		{D5C29D39-536A-408F-8553-7579BD053EFA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4A5833D6-5730-4607-8422-A374D6448BF6}
+		SolutionGuid = {8111D68C-0DE1-4703-97A6-8025906F49F9}
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using PaddleOCRSharp;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -106,5 +108,54 @@ namespace MengOCR
         }
 
 
+        public static string Structure2String(OCRStructureResult structureResult, bool spaceSeparate = false)
+        {
+            try
+            {
+                var rows = structureResult.Cells.GroupBy(r => r.Row);
+                if (!rows.Any())
+                {
+                    return null;
+                }
+                var lines = new List<string>();
+                foreach (var row in rows)
+                {
+                    var line = "";
+                    foreach (var item in row)
+                    {
+                        if (string.IsNullOrEmpty(item.Text))
+                        {
+                            line += " ";
+                        }
+                        else
+                        {
+                            if (spaceSeparate)
+                            {
+                                line += item.Text + '\t';
+                            }
+                            else
+                            {
+                                line += item.Text;
+                            }
+                        }
+                    }
+                    lines.Add(line);
+                }
+
+                Console.WriteLine(lines);
+
+                return string.Join("\n", lines.ToArray());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            return null;
+        }
+
+
     }
+
+
 }

@@ -1,7 +1,9 @@
 ﻿using JsonFlatFileDataStore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MengOCR
@@ -19,7 +21,54 @@ namespace MengOCR
             store = new DataStore("meng-ocr.json");
         }
 
+        /// <summary>
+        /// 根据文件目录创建config.json
+        /// </summary>
+        /// <returns></returns>
+        public async Task SyncWorkspace(string path)
+        {
+            //读取目录作为工作区
+            var dirs = Directory.GetDirectories(path);
+            if (!dirs.Any()) { return; }
+            var collection = store.GetCollection<Workspace>();
+            var ocrItemCollection = store.GetCollection<OcrDataItem>();
 
+            //读取每个目录（工作区）中的文件作为item
+            foreach (var dir in dirs)
+            {
+                var name = new DirectoryInfo(dir).Name;
+                var exist = collection.Find(w => w.Name == name);
+                if (exist.Count() < 1)
+                {
+                    await AddWorkspaceAsync(name);
+                }
+
+                var files = Directory.GetFiles(dir);
+                foreach (var file in files)
+                {
+                    var img = Path.GetFileName(file);
+                    var imgexist = ocrItemCollection.Find(f => f.ImgFileName == img);
+                    if (imgexist.Count() < 1)
+                    {
+                        //识别图片内容
+                        await AddOCRItemAsync(new OcrDataItem
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            ImgFileName = img,
+                            WorkspaceName = name,
+                            ContentTxt = "",
+                            CreateTime = new FileInfo(file).CreationTime
+                        });
+                    }
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// 初始化工作区，创建默认工作区
+        /// </summary>
+        /// <returns></returns>
         public async Task InitWorkspace()
         {
             var collection = store.GetCollection<Workspace>();
@@ -42,7 +91,11 @@ namespace MengOCR
             return collection.AsQueryable().ToList();
         }
 
-
+        /// <summary>
+        /// 添加工作区
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public async Task AddWorkspaceAsync(string name)
         {
             var collection = store.GetCollection<Workspace>();
@@ -55,20 +108,37 @@ namespace MengOCR
             await collection.InsertOneAsync(space);
         }
 
-
+        /// <summary>
+        /// 获取所有工作区
+        /// </summary>
+        /// <returns></returns>
         public List<Workspace> GetWorkspaceAsync()
         {
             var collection = store.GetCollection<Workspace>();
             return collection.AsQueryable().ToList();
         }
 
-        public List<Workspace> DeleteWorkspaceAsync(string name)
+        /// <summary>
+        /// 删除一个工作区
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public void DeleteWorkspaceAsync(string name)
         {
             var collection = store.GetCollection<Workspace>();
-            return collection.AsQueryable().ToList();
+            collection.DeleteOne(w => w.Name == name);
+
+            //删除item
+            var items = store.GetCollection<OcrDataItem>();
+            items.DeleteMany(w => w.WorkspaceName == name);
+
         }
 
-
+        /// <summary>
+        /// 在内容中搜索关键字
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
         public List<OcrDataItem> SearchAsync(string keyword)
         {
             var collection = store.GetCollection<OcrDataItem>();
@@ -78,24 +148,56 @@ namespace MengOCR
             return results;
         }
 
+        /// <summary>
+        /// 根据文件名获取一个指定的OcrDataItem
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public OcrDataItem GetOCRItemAsync(string filename)
         {
             var collection = store.GetCollection<OcrDataItem>();
             return collection.Find(t => t.ImgFileName == filename).First();
         }
 
+        /// <summary>
+        /// 获取一个工作区中所有的OcrDataItem
+        /// </summary>
+        /// <param name="space"></param>
+        /// <returns></returns>
+        public List<OcrDataItem> GetOCRItemsByWorkspace(string space)
+        {
+            var collection = store.GetCollection<OcrDataItem>();
+            return collection.Find(t => t.WorkspaceName == space).ToList();
+
+        }
+
+        /// <summary>
+        /// 添加一个OcrDataItem
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public async Task AddOCRItemAsync(OcrDataItem item)
         {
             var collection = store.GetCollection<OcrDataItem>();
             await collection.InsertOneAsync(item);
         }
 
+        /// <summary>
+        /// 更新一个OcrDataItem
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public async Task UpdateOCRItemAsync(OcrDataItem item)
         {
             var collection = store.GetCollection<OcrDataItem>();
             await collection.UpdateOneAsync(item.Id, item);
         }
 
+        /// <summary>
+        /// 删除一个OcrDataItem
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task DeleteOCRItemAsync(dynamic id)
         {
             var collection = store.GetCollection<OcrDataItem>();
@@ -129,6 +231,5 @@ namespace MengOCR
         public DateTime CreateTime { get; set; }
 
     }
-
 
 }

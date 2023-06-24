@@ -11,23 +11,18 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static ReaLTaiizor.Drawing.Poison.PoisonPaint.ForeColor;
-using static System.Net.Mime.MediaTypeNames;
-using Image = System.Drawing.Image;
 
 namespace MengOCR
 {
-
     public partial class MainForm : Form
     {
         private readonly FileSystemWatcher FsWatcher = new FileSystemWatcher();
         private readonly PaddleOCREngine engine;
         private ScreenSnap snapForm;
         private Bitmap curBitmap;
-
         private readonly string SnapSaveDir = "";
 
-        private readonly List<string> ImgFileList = new List<string>();
+        private bool spaceSeparate = false;
 
         public MainForm()
         {
@@ -50,11 +45,14 @@ namespace MengOCR
             }
 
             OnFsChanges();
-        }
 
-        private void BtnSnapshot_Click(object sender, EventArgs e)
-        {
-            TakeSnapshot();
+            Task.Run(async () =>
+            {
+                await StoreData.Instance.InitWorkspace();
+                await StoreData.Instance.SyncWorkspace(SnapSaveDir);
+            });
+
+
         }
 
         private void OnFsChanges()
@@ -66,7 +64,6 @@ namespace MengOCR
             FsWatcher.EnableRaisingEvents = true;
         }
 
-
         private void FsWatcher_Created(object sender, FileSystemEventArgs e)
         {
             try
@@ -76,9 +73,6 @@ namespace MengOCR
                 this.BeginInvoke(new EventHandler(delegate
                 {
                     FileInfo fi = new FileInfo(newImgPath);
-
-                    UpdateImgListBox(fi.Name);
-
                 }));
 
             }
@@ -86,12 +80,6 @@ namespace MengOCR
             {
                 Console.WriteLine(ex.Message);
             }
-        }
-
-        private void UpdateImgListBox(string item)
-        {
-            UListImagesFiles.Items.Insert(0, item);
-            StatTotalFileNum.Text = $"共{UListImagesFiles.Items.Count}个图片";
         }
 
         private string RunOCR(Image img)
@@ -102,16 +90,13 @@ namespace MengOCR
             {
                 try
                 {
-
-                    OCRResult ocrResult = engine.DetectText(img as System.Drawing.Image) ??
+                    var ocrResult = engine.DetectStructure(img as System.Drawing.Image) ??
                         throw new Exception("识别出错了！！！");
-                    result = ocrResult.Text;
 
-
-                    StatWordCount.Text = $"共识别{result.Length}个字";
+                    result = Utils.Structure2String(ocrResult, spaceSeparate);
+                    TxtOCRResult.Text = result;
 
                     return result;
-
                 }
                 catch (Exception ex)
                 {
@@ -123,66 +108,6 @@ namespace MengOCR
             return result;
         }
 
-        private void NotifyIconOCR_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.Visible = true;
-            this.WindowState = FormWindowState.Normal;//窗口正常显示
-            this.ShowInTaskbar = true;//在任务栏中显示该窗口
-        }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            engine.Dispose();
-        }
-
-        private async void MainForm_Load(object sender, EventArgs e)
-        {
-            try
-            {
-                NotifyIconOCR.Visible = false;
-                StatTotalFileNum.Text = string.Empty;
-                StatWordCount.Text = string.Empty;
-
-                UListImagesFiles.Items.Clear();
-                var files = Directory.GetFiles(SnapSaveDir).ToList();
-                foreach (var file in files)
-                {
-                    ImgFileList.Add(file);
-
-                    var fi = new FileInfo(file);
-                    UpdateImgListBox(fi.Name);
-
-                }
-
-
-                await StoreData.Instance.InitWorkspace();
-
-                ReloadWorkspace();
-                CmbWorkspace.SelectedIndex = 0;
-
-                var k_hook = new KeyboardHook();
-                k_hook.KeyDownEvent += new KeyEventHandler(Hook_KeyDown);//钩住键按下
-                k_hook.Start();//安装键盘钩子
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void Hook_KeyDown(object sender, KeyEventArgs e)
-        {
-            //判断按下的键（Alt + A）
-            if (e.KeyValue == (int)Keys.X && (int)Control.ModifierKeys == (int)Keys.Alt)
-            {
-                //截图
-                TakeSnapshot();
-                Console.WriteLine($"{DateTime.Now} : 截图");
-            }
-        }
-
-
         public Bitmap GetScreen()
         {
             //获取整个屏幕图像,不包括任务栏
@@ -193,62 +118,6 @@ namespace MengOCR
                 g.CopyFromScreen(0, 0, 0, 0, new Size(ScreenArea.Width, ScreenArea.Height));
             }
             return bmp;
-        }
-
-        private async void ScreenShotOk_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Bitmap bmp = new Bitmap(snapForm.End.X - snapForm.Start.X, snapForm.End.Y - snapForm.Start.Y);
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    int w = snapForm.End.X - snapForm.Start.X;
-                    int h = snapForm.End.Y - snapForm.Start.Y;
-                    Rectangle destRect = new Rectangle(0, 0, w + 1, h + 1);//在画布上要显示的区域（记得像素加1）
-                    Rectangle srcRect = new Rectangle(snapForm.Start.X, snapForm.Start.Y, w + 1, h + 1);//图像上要截取的区域
-                    g.DrawImage(curBitmap, destRect, srcRect, GraphicsUnit.Pixel);//加图像绘制到画布上
-                }
-                this.PictureSnaped.Image = bmp;
-
-                this.WindowState = FormWindowState.Normal;
-                this.ShowInTaskbar = true;
-                this.StartPosition = FormStartPosition.CenterScreen;
-                this.Show();
-                var txt = this.RunOCR(this.PictureSnaped.Image);
-                this.UTextOCRResult.Text = txt;
-
-                //保存图片
-                var filename = $"{DateTime.Now.ToLocalTime().ToString().Replace('/', '-').Replace(':', '.')}.png";
-                var idx = CmbWorkspace.SelectedIndex;
-                var space = CmbWorkspace.Items[idx].ToString();
-
-                var spaceDir = Path.Combine(SnapSaveDir, space);
-                if (!Directory.Exists(spaceDir))
-                {
-                    Directory.CreateDirectory(spaceDir);
-                }
-
-                var imgFilename = Path.Combine(spaceDir, filename);
-                bmp.Save(imgFilename, System.Drawing.Imaging.ImageFormat.Png);
-
-                ImgFileList.Add(filename);
-
-                var item = new OcrDataItem()
-                {
-                    CreateTime = DateTime.Now,
-                    ContentTxt = txt,
-                    ImgFileName = imgFilename,
-                    WorkspaceName = CmbWorkspace.Name,
-
-                };
-
-                await StoreData.Instance.AddOCRItemAsync(item);
-            }
-            catch (Exception)
-            {
-
-            }
-
         }
 
         private void TakeSnapshot()
@@ -275,11 +144,224 @@ namespace MengOCR
             }
         }
 
-        private void BtnCopyResultText_Click(object sender, EventArgs e)
+        private async void ScreenShotOk_Click(object sender, EventArgs e)
         {
             try
             {
-                var txt = UTextOCRResult.Text;
+                Bitmap bmp = new Bitmap(snapForm.End.X - snapForm.Start.X, snapForm.End.Y - snapForm.Start.Y);
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    int w = snapForm.End.X - snapForm.Start.X;
+                    int h = snapForm.End.Y - snapForm.Start.Y;
+                    Rectangle destRect = new Rectangle(0, 0, w + 1, h + 1);//在画布上要显示的区域（记得像素加1）
+                    Rectangle srcRect = new Rectangle(snapForm.Start.X, snapForm.Start.Y, w + 1, h + 1);//图像上要截取的区域
+                    g.DrawImage(curBitmap, destRect, srcRect, GraphicsUnit.Pixel);//加图像绘制到画布上
+                }
+                this.PicBoxSnap.Image = bmp;
+
+                this.WindowState = FormWindowState.Normal;
+                this.ShowInTaskbar = true;
+                this.StartPosition = FormStartPosition.CenterScreen;
+                this.Show();
+                var txt = this.RunOCR(bmp);
+                this.TxtOCRResult.Text = txt;
+
+                //保存图片
+                var filename = $"{DateTime.Now.ToLocalTime().ToString().Replace('/', '-').Replace(':', '.')}.png";
+                var idx = CmbWorkspace.SelectedIndex;
+                var space = CmbWorkspace.Items[idx].ToString();
+
+                var spaceDir = Path.Combine(SnapSaveDir, space);
+                if (!Directory.Exists(spaceDir))
+                {
+                    Directory.CreateDirectory(spaceDir);
+                }
+
+                var imgFilename = Path.Combine(spaceDir, filename);
+                bmp.Save(imgFilename, System.Drawing.Imaging.ImageFormat.Png);
+
+                var item = new OcrDataItem()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    CreateTime = DateTime.Now,
+                    ContentTxt = txt,
+                    ImgFileName = filename,
+                    WorkspaceName = space,
+                };
+
+                ListBoxImgFiles.Items.Insert(0, item);
+
+                await StoreData.Instance.AddOCRItemAsync(item);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        private void ImgPreview()
+        {
+            try
+            {
+                var w = PicBoxSnap.Width;
+                var h = PicBoxSnap.Height;
+
+                var iw = PicBoxSnap.Image.Height;
+                var ih = PicBoxSnap.Image.Width;
+
+                if (iw > w || ih > h)
+                {//图片比窗口大
+                    PicBoxSnap.SizeMode = PictureBoxSizeMode.Zoom;
+                    Console.WriteLine("图片比窗口大");
+                }
+                else
+                {//图片比窗口小
+                    PicBoxSnap.SizeMode = PictureBoxSizeMode.CenterImage;
+                    Console.WriteLine("图片比窗口小");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// 从store重新加载工作区到下拉列表
+        /// </summary>
+        private void ReloadWorkspace()
+        {
+            try
+            {
+                var spaces = StoreData.Instance.GetWorkspaceAsync();
+
+                CmbWorkspace.Items.Clear();
+
+                foreach (var item in spaces)
+                {
+                    CmbWorkspace.Items.Add(item.Name);
+                }
+
+                if (CmbWorkspace.Items.Count > 0)
+                {
+                    CmbWorkspace.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 重新加载文件列表
+        /// 切换工作区后, 删除文件后
+        /// </summary>
+        private void ReloadFileList()
+        {
+            try
+            {
+                var space = GetSelectedWorkspace();
+                //从StoreData读取数据源
+                var all = StoreData.Instance.GetOCRItemsByWorkspace(space);
+                ListBoxImgFiles.Items.Clear();
+                foreach (var item in all)
+                {
+                    ListBoxImgFiles.Items.Add(item);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private string GetSelectedWorkspace()
+        {
+            var idx = CmbWorkspace.SelectedIndex;
+            if (idx == -1)
+            {
+                return "默认工作区";
+            }
+            var spaceDir = CmbWorkspace.Items[idx].ToString();
+            return spaceDir;
+        }
+
+        #region 事件
+
+        private void MainForm_LoadAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                NotifyIconOCR.Visible = false;
+                ListBoxImgFiles.DisplayMember = "ImgFileName";
+                ListBoxImgFiles.ValueMember = "ImgFileName";
+
+                ReloadWorkspace();
+                ReloadFileList();
+
+                var k_hook = new KeyboardHook();
+                k_hook.KeyDownEvent += new KeyEventHandler(Hook_KeyDown);//钩住键按下
+                k_hook.Start();//安装键盘钩子
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+
+        private void Hook_KeyDown(object sender, KeyEventArgs e)
+        {
+            //判断按下的键（Alt + X）
+            if (e.KeyValue == (int)Keys.X && (int)Control.ModifierKeys == (int)Keys.Alt)
+            {
+                //截图
+                TakeSnapshot();
+                Console.WriteLine($"{DateTime.Now} : 截图");
+            }
+        }
+
+
+        private void NotifyIconOCR_Click(object sender, EventArgs e)
+        {
+            this.Visible = true;
+            this.WindowState = FormWindowState.Normal;//窗口正常显示
+            this.ShowInTaskbar = true;//在任务栏中显示该窗口
+        }
+
+
+        #endregion
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                NotifyIconOCR.Visible = true;
+                ShowInTaskbar = false;
+            }
+            else
+            {
+                NotifyIconOCR.Visible = false;
+            }
+        }
+
+        private void BtnSnapshot_Click(object sender, EventArgs e)
+        {
+            TakeSnapshot();
+        }
+
+        private void BtnCopyResult_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var txt = TxtOCRResult.Text;
                 if (txt.Length > 1)
                 {
                     Clipboard.Clear();
@@ -297,79 +379,64 @@ namespace MengOCR
             try
             {
 
-                var txt = RunOCR(PictureSnaped.Image);
+                var txt = RunOCR(PicBoxSnap.Image);
 
                 if (!string.IsNullOrEmpty(txt))
                 {
-                    UTextOCRResult.Text = txt;
+                    TxtOCRResult.Text = txt;
                 }
 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void BtnSearch_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ListBoxImgFiles_MouseUp(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (e.Button != MouseButtons.Right || ListBoxImgFiles.SelectedIndex < 0)
+                {
+                    return;
+                }
+
+                MenuFileList.Show(ListBoxImgFiles, new Point(e.X, e.Y));
             }
             catch (Exception)
             {
 
+                throw;
             }
         }
 
-        private void UListImagesFiles_SelectedIndexChanged(object sender, EventArgs e)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            engine.Dispose();
+
+        }
+
+        private void ListBoxImgFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
                 //切换图片列表，同时切换图片
-                if (UListImagesFiles.SelectedIndex < 0)
+                if (ListBoxImgFiles.SelectedIndex < 0)
                 {
                     return;
                 }
-                string filename = UListImagesFiles.SelectedItem.ToString();
-                var idx = CmbWorkspace.SelectedIndex;
-                var spaceDir = CmbWorkspace.Items[idx].ToString();
-                string imgPath = Path.Combine(SnapSaveDir, spaceDir, filename);
+                if (!(ListBoxImgFiles.SelectedItem is OcrDataItem ocr)) { return; }
+                string imgPath = Path.Combine(SnapSaveDir, ocr.WorkspaceName, ocr.ImgFileName);
 
                 if (File.Exists(imgPath))
                 {
-                    PictureSnaped.ImageLocation = imgPath;
-                }
-
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private void MainForm_Resize(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                NotifyIconOCR.Visible = true;
-                ShowInTaskbar = false;
-            }
-            else
-            {
-                NotifyIconOCR.Visible = false;
-            }
-        }
-
-
-        private void ImgPreview()
-        {
-            try
-            {
-                var w = PictureSnaped.Width;
-                var h = PictureSnaped.Height;
-
-                var iw = PictureSnaped.Image.Height;
-                var ih = PictureSnaped.Image.Width;
-
-                if (iw > w || ih > h)
-                {//图片比窗口大
-                    PictureSnaped.SizeMode = PictureBoxSizeMode.Zoom;
-                    Console.WriteLine("图片比窗口大");
-                }
-                else
-                {//图片比窗口小
-                    PictureSnaped.SizeMode = PictureBoxSizeMode.CenterImage;
-                    Console.WriteLine("图片比窗口小");
+                    PicBoxSnap.ImageLocation = imgPath;
                 }
 
             }
@@ -377,126 +444,7 @@ namespace MengOCR
             {
                 MessageBox.Show(ex.Message);
             }
-        }
 
-        private void PictureSnaped_LoadCompleted(object sender, AsyncCompletedEventArgs e)
-        {
-            ImgPreview();
-
-        }
-
-        private void UListImagesFiles_MouseDown(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                if (e.Button != MouseButtons.Right)
-                {
-                    return;
-                }
-
-                HFileListMenu.Show(UListImagesFiles, new Point(e.X, e.Y));
-
-
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        private void HMenuRename_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var selected = UListImagesFiles.SelectedItem.ToString();
-
-                var file = Path.Combine(SnapSaveDir, selected);
-                if (File.Exists(file))
-                {
-                    //TODO 重命名窗口
-                    //var newname = "";
-                    if (false)
-                    {
-                        //File.Move(file, newname);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private void HMenuDelete_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var idx = UListImagesFiles.SelectedIndex;
-                var selected = UListImagesFiles.Items[idx].ToString();
-
-                var spaceIdx = CmbWorkspace.SelectedIndex;
-                var space = CmbWorkspace.Items[spaceIdx].ToString();
-
-                var file = Path.Combine(SnapSaveDir, space, selected);
-                if (File.Exists(file))
-                {
-                    var res = MessageBox.Show("确定要删除吗？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                    if (res == DialogResult.OK)
-                    {
-                        File.Delete(file);
-                        //TODO 更新文件列表
-
-                        ReloadFileList();
-                    }
-                }
-
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private void UMainForm_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                HMainMenu.Show(this, new Point(e.X, e.Y));
-            }
-        }
-
-        private void HMainMenuExportPdf_Click(object sender, EventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        private async void HMainMenuNewWorkspace_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var form = new AddWorkspaceForm();
-                form.ShowDialog(this);
-                var name = form.TxtWorkspaceName.Text;
-
-                await StoreData.Instance.AddWorkspaceAsync(name);
-
-                // 重载工作区列表
-                ReloadWorkspace();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
 
         private void CmbWorkspace_SelectedIndexChanged(object sender, EventArgs e)
@@ -508,49 +456,99 @@ namespace MengOCR
             ReloadFileList();
         }
 
-        /// <summary>
-        /// 从store重新加载工作区到下拉列表
-        /// </summary>
-        private void ReloadWorkspace()
+        private void PicBoxSnap_LoadCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            ImgPreview();
+        }
+
+        private void BtnStateSpaceSeparate_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+
+        }
+
+        private void BtnStateSpaceEnable_Click(object sender, EventArgs e)
+        {
+            BtnStateSpaceDisable.Checked = false;
+            BtnStateSpaceDisable.CheckState = CheckState.Unchecked;
+            BtnStateSpaceEnable.Checked = true;
+            BtnStateSpaceEnable.CheckState = CheckState.Checked;
+
+            spaceSeparate = true;
+        }
+
+        private void BtnStateSpaceDisable_Click(object sender, EventArgs e)
+        {
+            BtnStateSpaceDisable.Checked = true;
+            BtnStateSpaceDisable.CheckState = CheckState.Checked;
+            BtnStateSpaceEnable.Checked = false;
+            BtnStateSpaceEnable.CheckState = CheckState.Unchecked;
+
+            spaceSeparate = false;
+        }
+
+        private async void MenuNewWorkspace_Click(object sender, EventArgs e)
         {
             try
             {
-                var spaces = StoreData.Instance.GetWorkspaceAsync();
+                var inputform = new InputForm();
+                inputform.ShowDialog(this);
+                var newspace = inputform.NewValue;
 
-                CmbWorkspace.Items.Clear();
+                await StoreData.Instance.AddWorkspaceAsync(newspace);
 
-                foreach (var item in spaces)
-                {
-                    CmbWorkspace.Items.Add(item.Name);
-                }
+                ReloadWorkspace();
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
             }
         }
 
-        /// <summary>
-        /// 重新加载文件列表
-        /// 切换工作区后, 删除文件后
-        /// </summary>
-        private void ReloadFileList()
+        private void MenuRenameWorkSpace_Click(object sender, EventArgs e)
         {
             try
             {
-                var idx = CmbWorkspace.SelectedIndex;
-                var spaceDir = CmbWorkspace.Items[idx].ToString();
-                var dir = Path.Combine(SnapSaveDir, spaceDir);
 
-                UListImagesFiles.Items.Clear();
+                var space = GetSelectedWorkspace();
 
-                var files = Directory.GetFiles(dir);
+                var source = Path.Combine(SnapSaveDir, space);
 
-                foreach (var file in files)
+                //修改目录名称
+
+
+                //修改Store中的工作区名称
+
+
+                //重新加载工作区
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void MenuDelWorkspace_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var space = GetSelectedWorkspace();
+                var res = MessageBox.Show($"是否删除工作区：{space}", "删除", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (res == DialogResult.OK)
                 {
-                    var fi = new FileInfo(file);
-                    UListImagesFiles.Items.Insert(0, fi.Name);
+                    //删除Store
+                    StoreData.Instance.DeleteWorkspaceAsync(space);
+
+                    //删除工作区目录
+                    var dir = Path.Combine(SnapSaveDir, space);
+                    if (Directory.Exists(dir))
+                    {
+                        Directory.Delete(dir, true);
+                    }
+
+                    //重新加载工作区
+                    ReloadWorkspace();
                 }
             }
             catch (Exception ex)
@@ -559,27 +557,67 @@ namespace MengOCR
             }
         }
 
-        private void BtnSearch_Click(object sender, EventArgs e)
+        private async void MenuFileRename_Click(object sender, EventArgs e)
         {
             try
             {
-                var keyword = TxtSearchKeyword.Text;
-                if (string.IsNullOrEmpty(keyword)) { return; }
-
-                var items = StoreData.Instance.SearchAsync(keyword);
-
-                CmbWorkspace.SelectedIndex = 0;
-                UListImagesFiles.Items.Clear();
-
-                foreach (var item in items)
+                if (ListBoxImgFiles.SelectedItem is OcrDataItem item)
                 {
-                    var fi = new FileInfo(item.ImgFileName);
-                    UListImagesFiles.Items.Add(fi.Name);
+                    var oldname = item.ImgFileName;
+                    //重命名窗体
+                    var form = new InputForm();
+                    form.OldValue = oldname;
+                    form.ShowDialog(this);
+                    var newname = form.NewValue;
+                    if (string.IsNullOrEmpty(newname))
+                    {
+                        return;
+                    }
+
+                    item.ImgFileName = newname;
+
+                    //更新store
+                    await StoreData.Instance.UpdateOCRItemAsync(item);
+                    //更新文件名
+                    var source = Path.Combine(SnapSaveDir, item.WorkspaceName, oldname);
+                    var dist = Path.Combine(SnapSaveDir, item.WorkspaceName, newname);
+
+                    if (File.Exists(source))
+                    {
+                        File.Move(source, dist);
+                    }
+                    //重新加载文件列表
+                    ReloadFileList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
+        private async void MenuFileDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (ListBoxImgFiles.SelectedItem is OcrDataItem item)
+                {
+                    //删除store
+                    await StoreData.Instance.DeleteOCRItemAsync(item.Id);
+                    //删除文件
+
+                    var file = Path.Combine(SnapSaveDir, item.WorkspaceName, item.ImgFileName);
+                    if (File.Exists(file))
+                    {
+                        File.Delete(file);
+                    }
+                    //重新加载文件列表
+                    ReloadFileList();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

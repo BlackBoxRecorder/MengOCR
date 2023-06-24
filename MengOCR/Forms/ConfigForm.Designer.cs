@@ -1,6 +1,6 @@
-﻿namespace MengOCR
+﻿namespace MengOCR.Forms
 {
-    partial class ScreenSnap
+    partial class ConfigForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,20 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.SuspendLayout();
-            // 
-            // ScreenSnap
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "ScreenSnap";
-            this.Text = "ScreenSnap";
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ScreenSnap_MouseDown);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ScreenSnap_MouseMove);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ScreenSnap_MouseUp);
-            this.ResumeLayout(false);
-
+            this.Text = "ConfigForm";
         }
 
         #endregion
