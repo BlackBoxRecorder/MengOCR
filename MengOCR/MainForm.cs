@@ -1,4 +1,5 @@
 ﻿using MengOCR.Forms;
+using NLog;
 using PaddleOCRSharp;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,9 @@ namespace MengOCR
 {
     public partial class MainForm : Form
     {
+        public static readonly Logger logger = LogManager.GetLogger("Program");
+
+
         private readonly FileSystemWatcher FsWatcher = new FileSystemWatcher();
         private readonly PaddleOCREngine engine;
         private ScreenSnap snapForm;
@@ -23,6 +27,9 @@ namespace MengOCR
         private readonly string SnapSaveDir = "";
 
         private bool spaceSeparate = false;
+
+
+
 
         public MainForm()
         {
@@ -80,7 +87,6 @@ namespace MengOCR
             }
         }
 
-
         private string RunOCR(Image img)
         {
             int success = 0;
@@ -107,7 +113,10 @@ namespace MengOCR
             return result;
         }
 
-
+        /// <summary>
+        /// 截取整个屏幕图像
+        /// </summary>
+        /// <returns></returns>
         public Bitmap GetScreen()
         {
             //获取整个屏幕图像,不包括任务栏
@@ -228,7 +237,6 @@ namespace MengOCR
             }
         }
 
-
         /// <summary>
         /// 从store重新加载工作区到下拉列表
         /// </summary>
@@ -333,7 +341,6 @@ namespace MengOCR
         }
 
 
-        #region 事件
 
         private void MainForm_LoadAsync(object sender, EventArgs e)
         {
@@ -345,6 +352,8 @@ namespace MengOCR
 
                 ReloadWorkspace();
                 ReloadFileList();
+
+                logger.Info("测试logger");
 
                 var k_hook = new KeyboardHook();
                 k_hook.KeyDownEvent += new KeyEventHandler(Hook_KeyDown);//钩住键按下
@@ -379,14 +388,13 @@ namespace MengOCR
         }
 
 
-        #endregion
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
             {
                 NotifyIconOCR.Visible = true;
-                ShowInTaskbar = false;
+                //ShowInTaskbar = false;
             }
             else
             {
@@ -486,6 +494,8 @@ namespace MengOCR
                 }
                 if (!(ListBoxImgFiles.SelectedItem is OcrDataItem ocr)) { return; }
                 string imgPath = Path.Combine(SnapSaveDir, ocr.WorkspaceName, ocr.ImgFileName);
+
+                TxtOCRResult.Text = ocr.ContentTxt;
 
                 if (File.Exists(imgPath))
                 {
