@@ -40,7 +40,6 @@ namespace MengOCR
             string str = GetExceptionMsg(e.Exception, e.ToString());
             logger.Error(str);
             MessageBox.Show(ERROR_MSG, "系统错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Environment.Exit(0);
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -48,7 +47,6 @@ namespace MengOCR
             string str = GetExceptionMsg(e.ExceptionObject as Exception, e.ToString());
             logger.Error(str);
             MessageBox.Show(ERROR_MSG, "系统错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Environment.Exit(0);
         }
 
         /// <summary>
