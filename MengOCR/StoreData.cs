@@ -22,6 +22,52 @@ namespace MengOCR
         }
 
         /// <summary>
+        /// 设置或更新KeyValue
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        public void SetKeyVal<T>(string key, T val)
+        {
+            try
+            {
+                var exsit = store.GetKeys().ContainsKey(key);
+                if (exsit)
+                {
+                    store.UpdateItem(key, val);
+                }
+                else
+                {
+                    store.InsertItem(key, val);
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        public T GetKeyVal<T>(string key)
+        {
+            try
+            {
+                var exsit = store.GetKeys().ContainsKey(key);
+                if (exsit)
+                {
+                    return store.GetItem<T>(key);
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+            return (T)(object)null;
+
+        }
+
+        /// <summary>
         /// 清空store
         /// </summary>
         public async Task ClearStore()

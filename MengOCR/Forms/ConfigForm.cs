@@ -27,5 +27,18 @@ namespace MengOCR.Forms
         {
             RebuildStoreClick.Invoke(this, new EventArgs());
         }
+
+        private void ConfigForm_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                string SnapSaveDir = StoreData.Instance.GetKeyVal<string>("snapSaveDir");
+                TxtSnapSaveDir.Text = SnapSaveDir;
+            }
+            catch (Exception)
+            {
+
+            }
+        }
     }
 }

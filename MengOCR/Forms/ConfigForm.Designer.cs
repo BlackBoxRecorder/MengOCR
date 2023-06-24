@@ -31,7 +31,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.BtnSaveConfig = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.TxtSnapSaveDir = new System.Windows.Forms.TextBox();
             this.BtnSelectSaveDir = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.BtnRebuildStore = new System.Windows.Forms.Button();
@@ -65,12 +65,12 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "存储位置";
             // 
-            // textBox1
+            // TxtSnapSaveDir
             // 
-            this.textBox1.Location = new System.Drawing.Point(88, 33);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(369, 21);
-            this.textBox1.TabIndex = 2;
+            this.TxtSnapSaveDir.Location = new System.Drawing.Point(88, 33);
+            this.TxtSnapSaveDir.Name = "TxtSnapSaveDir";
+            this.TxtSnapSaveDir.Size = new System.Drawing.Size(369, 21);
+            this.TxtSnapSaveDir.TabIndex = 2;
             // 
             // BtnSelectSaveDir
             // 
@@ -108,7 +108,7 @@
             this.Controls.Add(this.BtnRebuildStore);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.BtnSelectSaveDir);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.TxtSnapSaveDir);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
             this.MaximizeBox = false;
@@ -116,6 +116,7 @@
             this.Name = "ConfigForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "设置";
+            this.Load += new System.EventHandler(this.ConfigForm_Load);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -127,7 +128,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button BtnSaveConfig;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox TxtSnapSaveDir;
         private System.Windows.Forms.Button BtnSelectSaveDir;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button BtnRebuildStore;

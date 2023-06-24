@@ -45,13 +45,26 @@ namespace MengOCR
             //建议程序全局初始化一次即可，不必每次识别都初始化，容易报错。     
             engine = new PaddleOCREngine(config, oCRParameter);
 
-            var userPicDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-            SnapSaveDir = Path.Combine(userPicDir, "MengOCR");
+            SnapSaveDir = StoreData.Instance.GetKeyVal<string>("snapSaveDir");
+
+            if (string.IsNullOrEmpty(SnapSaveDir))
+            {//没有设置路径，设为默认
+                var userPicDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                SnapSaveDir = Path.Combine(userPicDir, "MengOCR");
+
+                StoreData.Instance.SetKeyVal<string>("snapSaveDir", SnapSaveDir);
+            }
+            else
+            {
+
+            }
 
             if (!Directory.Exists(SnapSaveDir))
             {
                 Directory.CreateDirectory(SnapSaveDir);
             }
+
+
 
             OnFsChanges();
 
