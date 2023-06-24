@@ -25,6 +25,7 @@ namespace MengOCR
         private ScreenSnap snapForm;
         private Bitmap curBitmap;
         private readonly string SnapSaveDir = "";
+        private readonly KeyboardHook k_hook = new KeyboardHook();
 
         private bool spaceSeparate = false;
 
@@ -112,7 +113,7 @@ namespace MengOCR
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    logger.Error(ex);
                     success++;
                 }
             } while (0 < success && success < 5);
@@ -347,31 +348,18 @@ namespace MengOCR
             });
         }
 
-
-
         private void MainForm_LoadAsync(object sender, EventArgs e)
         {
-            try
-            {
-                NotifyIconOCR.Visible = false;
-                ListBoxImgFiles.DisplayMember = "ImgFileName";
-                ListBoxImgFiles.ValueMember = "ImgFileName";
 
-                ReloadWorkspace();
-                ReloadFileList();
+            NotifyIconOCR.Visible = false;
+            ListBoxImgFiles.DisplayMember = "ImgFileName";
+            ListBoxImgFiles.ValueMember = "ImgFileName";
 
-                logger.Info("测试logger");
+            ReloadWorkspace();
+            ReloadFileList();
 
-                var k_hook = new KeyboardHook();
-                k_hook.KeyDownEvent += new KeyEventHandler(Hook_KeyDown);//钩住键按下
-                k_hook.Start();//安装键盘钩子
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
+            k_hook.KeyDownEvent += new KeyEventHandler(Hook_KeyDown);//钩住键按下
+            k_hook.Start();//安装键盘钩子
         }
 
 
@@ -416,18 +404,11 @@ namespace MengOCR
 
         private void BtnCopyResult_Click(object sender, EventArgs e)
         {
-            try
+            var txt = TxtOCRResult.Text;
+            if (txt.Length > 1)
             {
-                var txt = TxtOCRResult.Text;
-                if (txt.Length > 1)
-                {
-                    Clipboard.Clear();
-                    Clipboard.SetText(txt);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "错误");
+                Clipboard.Clear();
+                Clipboard.SetText(txt);
             }
         }
 
@@ -469,24 +450,26 @@ namespace MengOCR
 
         private void ListBoxImgFiles_MouseUp(object sender, MouseEventArgs e)
         {
-            try
+            if (e.Button != MouseButtons.Right || ListBoxImgFiles.SelectedIndex < 0)
             {
-                if (e.Button != MouseButtons.Right || ListBoxImgFiles.SelectedIndex < 0)
-                {
-                    return;
-                }
-
-                MenuFileList.Show(ListBoxImgFiles, new Point(e.X, e.Y));
+                return;
             }
-            catch (Exception)
-            {
 
-            }
+            MenuFileList.Show(ListBoxImgFiles, new Point(e.X, e.Y));
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            engine.Dispose();
+            try
+            {
+                engine.Dispose();
+                k_hook.KeyDownEvent -= new KeyEventHandler(Hook_KeyDown);
+                k_hook.Stop();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+            }
 
         }
 
@@ -559,32 +542,23 @@ namespace MengOCR
 
         private async void MenuNewWorkspace_Click(object sender, EventArgs e)
         {
-            try
+            var inputform = new InputForm();
+            inputform.Text = "添加工作区";
+            inputform.ShowDialog(this);
+            var newspace = inputform.NewValue;
+            if (string.IsNullOrEmpty(newspace))
             {
-                var inputform = new InputForm();
-                inputform.Text = "添加工作区";
-                inputform.ShowDialog(this);
-                var newspace = inputform.NewValue;
-                if (string.IsNullOrEmpty(newspace))
-                {
-                    return;
-                }
-                await StoreData.Instance.AddWorkspaceAsync(newspace);
-
-                ReloadWorkspace(newspace);
-
+                return;
             }
-            catch (Exception ex)
-            {
+            await StoreData.Instance.AddWorkspaceAsync(newspace);
 
-            }
+            ReloadWorkspace(newspace);
         }
 
         private async void MenuRenameWorkSpace_Click(object sender, EventArgs e)
         {
             try
             {
-
                 var space = GetSelectedWorkspace();
 
                 var source = Path.Combine(SnapSaveDir, space);
