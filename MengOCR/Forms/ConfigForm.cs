@@ -12,9 +12,20 @@ namespace MengOCR.Forms
 {
     public partial class ConfigForm : Form
     {
+
+        public event EventHandler RebuildStoreClick;
+
+
         public ConfigForm()
         {
             InitializeComponent();
+        }
+
+
+
+        private void BtnRebuildStore_Click(object sender, EventArgs e)
+        {
+            RebuildStoreClick.Invoke(this, new EventArgs());
         }
     }
 }

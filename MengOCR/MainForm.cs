@@ -48,11 +48,7 @@ namespace MengOCR
 
             OnFsChanges();
 
-            Task.Run(async () =>
-            {
-                await StoreData.Instance.InitWorkspace();
-                await StoreData.Instance.SyncWorkspace(SnapSaveDir);
-            });
+
 
 
         }
@@ -84,6 +80,7 @@ namespace MengOCR
             }
         }
 
+
         private string RunOCR(Image img)
         {
             int success = 0;
@@ -109,6 +106,7 @@ namespace MengOCR
 
             return result;
         }
+
 
         public Bitmap GetScreen()
         {
@@ -299,6 +297,42 @@ namespace MengOCR
             return spaceDir;
         }
 
+        /// <summary>
+        /// 选择一个存储目录，重建store
+        /// </summary>
+        private void ReBuildStore()
+        {
+
+            Task.Run(async () =>
+            {
+                await StoreData.Instance.ClearStore();
+                await StoreData.Instance.InitWorkspace();
+                await StoreData.Instance.SyncWorkspace(SnapSaveDir);
+
+                var allItems = StoreData.Instance.GetAllOCRItems();
+
+                foreach (var item in allItems)
+                {
+                    var filepath = Path.Combine(SnapSaveDir, item.WorkspaceName, item.ImgFileName);
+                    if (!File.Exists(filepath))
+                    {
+                        throw new FileNotFoundException(filepath);
+                    }
+                    var img = Image.FromFile(filepath);
+                    var ocrResult = engine.DetectStructure(img as System.Drawing.Image) ??
+                        throw new Exception("识别出错了！！！");
+
+                    var result = Utils.Structure2String(ocrResult, spaceSeparate);
+
+                    item.ContentTxt = result;
+
+                    await StoreData.Instance.UpdateOCRItemAsync(item);
+                }
+
+            });
+        }
+
+
         #region 事件
 
         private void MainForm_LoadAsync(object sender, EventArgs e)
@@ -403,7 +437,19 @@ namespace MengOCR
 
         private void BtnSearch_Click(object sender, EventArgs e)
         {
+            var keyword = TxtKeyword.Text;
+            if (string.IsNullOrEmpty(keyword))
+            {
+                return;
+            }
 
+            var items = StoreData.Instance.SearchAsync(keyword);
+            CmbWorkspace.SelectedIndex = -1;
+            ListBoxImgFiles.Items.Clear();
+            foreach (var item in items)
+            {
+                ListBoxImgFiles.Items.Add(item);
+            }
         }
 
         private void ListBoxImgFiles_MouseUp(object sender, MouseEventArgs e)
@@ -420,7 +466,6 @@ namespace MengOCR
             catch (Exception)
             {
 
-                throw;
             }
         }
 
@@ -653,6 +698,25 @@ namespace MengOCR
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void MenuConfig_Click(object sender, EventArgs e)
+        {
+            var form = new ConfigForm();
+            form.RebuildStoreClick += Form_RebuildStoreClick;
+            form.ShowDialog(this);
+
+            form.RebuildStoreClick -= Form_RebuildStoreClick;
+
+        }
+
+        private void Form_RebuildStoreClick(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("是否重建缓存？", "警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (result == DialogResult.OK)
+            {
+                ReBuildStore();
             }
         }
     }

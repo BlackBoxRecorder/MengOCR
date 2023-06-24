@@ -36,8 +36,6 @@
             this.MenuRenameWorkSpace = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuDelWorkspace = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuConfig = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuStorage = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuNormalConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.BtnSearch = new System.Windows.Forms.Button();
@@ -52,8 +50,6 @@
             this.TxtOCRResult = new System.Windows.Forms.RichTextBox();
             this.PicBoxSnap = new System.Windows.Forms.PictureBox();
             this.StatusStripBar = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.BtnStateSpaceSeparate = new System.Windows.Forms.ToolStripDropDownButton();
             this.BtnStateSpaceDisable = new System.Windows.Forms.ToolStripMenuItem();
             this.BtnStateSpaceEnable = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,6 +57,8 @@
             this.MenuFileList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuFileRename = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuFileDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuPdfOCR = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuVideoOCR = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -81,7 +79,9 @@
             // 
             this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuWorkspace,
-            this.MenuConfig});
+            this.MenuConfig,
+            this.MenuPdfOCR,
+            this.MenuVideoOCR});
             this.MainMenu.Location = new System.Drawing.Point(0, 0);
             this.MainMenu.Name = "MainMenu";
             this.MainMenu.Size = new System.Drawing.Size(944, 25);
@@ -101,44 +101,30 @@
             // MenuNewWorkspace
             // 
             this.MenuNewWorkspace.Name = "MenuNewWorkspace";
-            this.MenuNewWorkspace.Size = new System.Drawing.Size(180, 22);
+            this.MenuNewWorkspace.Size = new System.Drawing.Size(112, 22);
             this.MenuNewWorkspace.Text = "新建";
             this.MenuNewWorkspace.Click += new System.EventHandler(this.MenuNewWorkspace_Click);
             // 
             // MenuRenameWorkSpace
             // 
             this.MenuRenameWorkSpace.Name = "MenuRenameWorkSpace";
-            this.MenuRenameWorkSpace.Size = new System.Drawing.Size(180, 22);
+            this.MenuRenameWorkSpace.Size = new System.Drawing.Size(112, 22);
             this.MenuRenameWorkSpace.Text = "重命名";
             this.MenuRenameWorkSpace.Click += new System.EventHandler(this.MenuRenameWorkSpace_Click);
             // 
             // MenuDelWorkspace
             // 
             this.MenuDelWorkspace.Name = "MenuDelWorkspace";
-            this.MenuDelWorkspace.Size = new System.Drawing.Size(180, 22);
+            this.MenuDelWorkspace.Size = new System.Drawing.Size(112, 22);
             this.MenuDelWorkspace.Text = "删除";
             this.MenuDelWorkspace.Click += new System.EventHandler(this.MenuDelWorkspace_Click);
             // 
             // MenuConfig
             // 
-            this.MenuConfig.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuStorage,
-            this.MenuNormalConfig});
             this.MenuConfig.Name = "MenuConfig";
             this.MenuConfig.Size = new System.Drawing.Size(44, 21);
             this.MenuConfig.Text = "设置";
-            // 
-            // MenuStorage
-            // 
-            this.MenuStorage.Name = "MenuStorage";
-            this.MenuStorage.Size = new System.Drawing.Size(100, 22);
-            this.MenuStorage.Text = "存储";
-            // 
-            // MenuNormalConfig
-            // 
-            this.MenuNormalConfig.Name = "MenuNormalConfig";
-            this.MenuNormalConfig.Size = new System.Drawing.Size(100, 22);
-            this.MenuNormalConfig.Text = "偏好";
+            this.MenuConfig.Click += new System.EventHandler(this.MenuConfig_Click);
             // 
             // panel1
             // 
@@ -295,26 +281,12 @@
             // StatusStripBar
             // 
             this.StatusStripBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.toolStripStatusLabel2,
             this.BtnStateSpaceSeparate});
             this.StatusStripBar.Location = new System.Drawing.Point(0, 478);
             this.StatusStripBar.Name = "StatusStripBar";
             this.StatusStripBar.Size = new System.Drawing.Size(944, 23);
             this.StatusStripBar.TabIndex = 3;
             this.StatusStripBar.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(131, 18);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
-            // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(131, 18);
-            this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
             // BtnStateSpaceSeparate
             // 
@@ -336,7 +308,7 @@
             this.BtnStateSpaceDisable.CheckOnClick = true;
             this.BtnStateSpaceDisable.CheckState = System.Windows.Forms.CheckState.Checked;
             this.BtnStateSpaceDisable.Name = "BtnStateSpaceDisable";
-            this.BtnStateSpaceDisable.Size = new System.Drawing.Size(180, 22);
+            this.BtnStateSpaceDisable.Size = new System.Drawing.Size(160, 22);
             this.BtnStateSpaceDisable.Text = "不使用空格分隔";
             this.BtnStateSpaceDisable.Click += new System.EventHandler(this.BtnStateSpaceDisable_Click);
             // 
@@ -344,7 +316,7 @@
             // 
             this.BtnStateSpaceEnable.CheckOnClick = true;
             this.BtnStateSpaceEnable.Name = "BtnStateSpaceEnable";
-            this.BtnStateSpaceEnable.Size = new System.Drawing.Size(180, 22);
+            this.BtnStateSpaceEnable.Size = new System.Drawing.Size(160, 22);
             this.BtnStateSpaceEnable.Text = "使用空格分隔";
             this.BtnStateSpaceEnable.Click += new System.EventHandler(this.BtnStateSpaceEnable_Click);
             // 
@@ -360,21 +332,33 @@
             this.MenuFileRename,
             this.MenuFileDelete});
             this.MenuFileList.Name = "MenuFileList";
-            this.MenuFileList.Size = new System.Drawing.Size(181, 70);
+            this.MenuFileList.Size = new System.Drawing.Size(113, 48);
             // 
             // MenuFileRename
             // 
             this.MenuFileRename.Name = "MenuFileRename";
-            this.MenuFileRename.Size = new System.Drawing.Size(180, 22);
+            this.MenuFileRename.Size = new System.Drawing.Size(112, 22);
             this.MenuFileRename.Text = "重命名";
             this.MenuFileRename.Click += new System.EventHandler(this.MenuFileRename_Click);
             // 
             // MenuFileDelete
             // 
             this.MenuFileDelete.Name = "MenuFileDelete";
-            this.MenuFileDelete.Size = new System.Drawing.Size(180, 22);
+            this.MenuFileDelete.Size = new System.Drawing.Size(112, 22);
             this.MenuFileDelete.Text = "删除";
             this.MenuFileDelete.Click += new System.EventHandler(this.MenuFileDelete_Click);
+            // 
+            // MenuPdfOCR
+            // 
+            this.MenuPdfOCR.Name = "MenuPdfOCR";
+            this.MenuPdfOCR.Size = new System.Drawing.Size(66, 21);
+            this.MenuPdfOCR.Text = "PDF识别";
+            // 
+            // MenuVideoOCR
+            // 
+            this.MenuVideoOCR.Name = "MenuVideoOCR";
+            this.MenuVideoOCR.Size = new System.Drawing.Size(70, 21);
+            this.MenuVideoOCR.Text = "视频OCR";
             // 
             // MainForm
             // 
@@ -419,7 +403,6 @@
         private System.Windows.Forms.ToolStripMenuItem MenuWorkspace;
         private System.Windows.Forms.ToolStripMenuItem MenuNewWorkspace;
         private System.Windows.Forms.ToolStripMenuItem MenuConfig;
-        private System.Windows.Forms.ToolStripMenuItem MenuStorage;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
@@ -440,12 +423,11 @@
         private System.Windows.Forms.ToolStripMenuItem MenuFileDelete;
         private System.Windows.Forms.ToolStripMenuItem MenuRenameWorkSpace;
         private System.Windows.Forms.ToolStripMenuItem MenuDelWorkspace;
-        private System.Windows.Forms.ToolStripMenuItem MenuNormalConfig;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripDropDownButton BtnStateSpaceSeparate;
         private System.Windows.Forms.ToolStripMenuItem BtnStateSpaceDisable;
         private System.Windows.Forms.ToolStripMenuItem BtnStateSpaceEnable;
+        private System.Windows.Forms.ToolStripMenuItem MenuPdfOCR;
+        private System.Windows.Forms.ToolStripMenuItem MenuVideoOCR;
     }
 }
 

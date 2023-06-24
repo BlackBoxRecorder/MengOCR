@@ -22,6 +22,18 @@ namespace MengOCR
         }
 
         /// <summary>
+        /// 清空store
+        /// </summary>
+        public async Task ClearStore()
+        {
+            var spaces = store.GetCollection<Workspace>();
+            var items = store.GetCollection<OcrDataItem>();
+
+            await spaces.DeleteManyAsync(s => s.Id != string.Empty);
+            await items.DeleteManyAsync(i => i.Id != string.Empty);
+        }
+
+        /// <summary>
         /// 根据文件目录创建config.json
         /// </summary>
         /// <returns></returns>
@@ -168,8 +180,19 @@ namespace MengOCR
         {
             var collection = store.GetCollection<OcrDataItem>();
             return collection.Find(t => t.WorkspaceName == space).ToList();
-
         }
+
+        /// <summary>
+        /// 获取所有的OcrDataItem
+        /// </summary>
+        /// <param name="space"></param>
+        /// <returns></returns>
+        public List<OcrDataItem> GetAllOCRItems()
+        {
+            var collection = store.GetCollection<OcrDataItem>();
+            return collection.AsQueryable().ToList();
+        }
+
 
         /// <summary>
         /// 添加一个OcrDataItem

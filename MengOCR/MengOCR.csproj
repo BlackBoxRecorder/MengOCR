@@ -108,6 +108,9 @@
     </Compile>
     <Compile Include="StoreData.cs" />
     <Compile Include="Utils.cs" />
+    <EmbeddedResource Include="Forms\ConfigForm.resx">
+      <DependentUpon>ConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\InputForm.resx">
       <DependentUpon>InputForm.cs</DependentUpon>
     </EmbeddedResource>
