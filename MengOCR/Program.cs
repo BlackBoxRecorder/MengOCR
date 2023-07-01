@@ -1,31 +1,35 @@
 ﻿using NLog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MengOCR
 {
     internal static class Program
     {
-
+        private static System.Threading.Mutex _mutex;
         private static readonly Logger logger = LogManager.GetLogger("Program");
-
         private static readonly string ERROR_MSG = "出现位置异常，请重启程序！";
+        private static readonly string REPEAT_MSG = "已经有一个实例正在运行！";
+
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
         static void Main()
         {
+            _mutex = new System.Threading.Mutex(true, "mengmengdaocr", out bool createNew);
+            if (false == createNew)
+            {
+                MessageBox.Show(REPEAT_MSG);
+                _mutex.ReleaseMutex();
+                return;
+            }
 
-            //设置应用程序处理异常方式：ThreadException处理
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-            //处理UI线程异常
+
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
-            //处理非UI线程异常
+
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
             Application.EnableVisualStyles();
@@ -49,12 +53,7 @@ namespace MengOCR
             MessageBox.Show(ERROR_MSG, "系统错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        /// <summary>
-        /// 生成自定义异常消息
-        /// </summary>
-        /// <param name="ex">异常对象</param>
-        /// <param name="backStr">备用异常消息：当ex为null时有效</param>
-        /// <returns>异常字符串文本</returns>
+
         static string GetExceptionMsg(Exception ex, string backStr)
         {
             StringBuilder sb = new StringBuilder();

@@ -30,12 +30,10 @@ namespace MengOCR
 
             StartPosition = FormStartPosition.CenterScreen;
 
-            //使用默认中英文V3模型
             OCRModelConfig config = null;
-            //使用默认参数
+
             OCRParameter oCRParameter = new OCRParameter();
-            //识别结果对象
-            //建议程序全局初始化一次即可，不必每次识别都初始化，容易报错。     
+
             engine = new PaddleOCREngine(config, oCRParameter);
 
             SnapSaveDir = StoreData.Instance.GetKeyVal<string>("snapSaveDir");
