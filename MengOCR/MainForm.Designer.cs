@@ -36,6 +36,8 @@
             this.MenuRenameWorkSpace = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuDelWorkspace = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuConfig = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuPdfOCR = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuVideoOCR = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.BtnSearch = new System.Windows.Forms.Button();
@@ -57,8 +59,6 @@
             this.MenuFileList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuFileRename = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuFileDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuPdfOCR = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuVideoOCR = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -125,6 +125,18 @@
             this.MenuConfig.Size = new System.Drawing.Size(44, 21);
             this.MenuConfig.Text = "设置";
             this.MenuConfig.Click += new System.EventHandler(this.MenuConfig_Click);
+            // 
+            // MenuPdfOCR
+            // 
+            this.MenuPdfOCR.Name = "MenuPdfOCR";
+            this.MenuPdfOCR.Size = new System.Drawing.Size(66, 21);
+            this.MenuPdfOCR.Text = "PDF识别";
+            // 
+            // MenuVideoOCR
+            // 
+            this.MenuVideoOCR.Name = "MenuVideoOCR";
+            this.MenuVideoOCR.Size = new System.Drawing.Size(70, 21);
+            this.MenuVideoOCR.Text = "视频OCR";
             // 
             // panel1
             // 
@@ -348,18 +360,6 @@
             this.MenuFileDelete.Text = "删除";
             this.MenuFileDelete.Click += new System.EventHandler(this.MenuFileDelete_Click);
             // 
-            // MenuPdfOCR
-            // 
-            this.MenuPdfOCR.Name = "MenuPdfOCR";
-            this.MenuPdfOCR.Size = new System.Drawing.Size(66, 21);
-            this.MenuPdfOCR.Text = "PDF识别";
-            // 
-            // MenuVideoOCR
-            // 
-            this.MenuVideoOCR.Name = "MenuVideoOCR";
-            this.MenuVideoOCR.Size = new System.Drawing.Size(70, 21);
-            this.MenuVideoOCR.Text = "视频OCR";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -369,6 +369,7 @@
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.MainMenu);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MainMenu;
             this.Name = "MainForm";
             this.Text = "萌萌哒OCR";

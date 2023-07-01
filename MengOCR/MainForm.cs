@@ -341,12 +341,14 @@ namespace MengOCR
             });
         }
 
-        private void MainForm_LoadAsync(object sender, EventArgs e)
+        private async void MainForm_LoadAsync(object sender, EventArgs e)
         {
 
             NotifyIconOCR.Visible = false;
             ListBoxImgFiles.DisplayMember = "ImgFileName";
             ListBoxImgFiles.ValueMember = "ImgFileName";
+
+            await StoreData.Instance.InitWorkspace();
 
             ReloadWorkspace();
             ReloadFileList();
