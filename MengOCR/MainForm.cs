@@ -2,13 +2,9 @@
 using NLog;
 using PaddleOCRSharp;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,7 +15,6 @@ namespace MengOCR
     {
         public static readonly Logger logger = LogManager.GetLogger("MainForm");
 
-
         private readonly FileSystemWatcher FsWatcher = new FileSystemWatcher();
         private readonly PaddleOCREngine engine;
         private ScreenSnap snapForm;
@@ -28,9 +23,6 @@ namespace MengOCR
         private readonly KeyboardHook k_hook = new KeyboardHook();
 
         private bool spaceSeparate = false;
-
-
-
 
         public MainForm()
         {
@@ -174,7 +166,6 @@ namespace MengOCR
                     Rectangle srcRect = new Rectangle(snapForm.Start.X, snapForm.Start.Y, w + 1, h + 1);//图像上要截取的区域
                     g.DrawImage(curBitmap, destRect, srcRect, GraphicsUnit.Pixel);//加图像绘制到画布上
                 }
-                this.PicBoxSnap.Image = bmp;
 
                 this.WindowState = FormWindowState.Normal;
                 this.ShowInTaskbar = true;
@@ -196,6 +187,8 @@ namespace MengOCR
 
                 var imgFilename = Path.Combine(spaceDir, filename);
                 bmp.Save(imgFilename, System.Drawing.Imaging.ImageFormat.Png);
+
+                this.PicBoxSnap.ImageLocation = imgFilename;
 
                 var item = new OcrDataItem()
                 {
@@ -381,8 +374,6 @@ namespace MengOCR
             this.WindowState = FormWindowState.Normal;//窗口正常显示
             this.ShowInTaskbar = true;//在任务栏中显示该窗口
         }
-
-
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
