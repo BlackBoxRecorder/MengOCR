@@ -9,7 +9,7 @@ namespace MengOCR
     {
         private static System.Threading.Mutex _mutex;
         private static readonly Logger logger = LogManager.GetLogger("Program");
-        private static readonly string ERROR_MSG = "出现位置异常，请重启程序！";
+        private static readonly string ERROR_MSG = "出现未知异常，请重启程序！";
         private static readonly string REPEAT_MSG = "已经有一个实例正在运行！";
 
         /// <summary>

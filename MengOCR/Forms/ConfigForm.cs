@@ -34,11 +34,52 @@ namespace MengOCR.Forms
             {
                 string SnapSaveDir = StoreData.Instance.GetKeyVal<string>("snapSaveDir");
                 TxtSnapSaveDir.Text = SnapSaveDir;
+
+                string keyBinding = StoreData.Instance.GetKeyVal<string>("keyBinding");
+                TxtKeybinding.Text = keyBinding;
+
             }
             catch (Exception)
             {
 
             }
         }
+
+        private void BtnSaveConfig_Click(object sender, EventArgs e)
+        {
+
+
+
+            Close();
+
+        }
+
+        private void TxtKeybinding_KeyDown(object sender, KeyEventArgs e)
+        {
+            Keys mkey;
+            if (e.Shift)
+            {
+                mkey = Keys.Shift;
+            }
+            else if (e.Alt)
+            {
+                mkey = Keys.Alt;
+            }
+            else if (e.Control)
+            {
+                mkey = Keys.Control;
+            }
+            else
+            {
+                return;
+            }
+
+            var key = e.KeyCode;
+            TxtKeybinding.Text = $"{mkey} + {key}";
+
+            StoreData.Instance.SetKeyVal<string>("keyBinding", $"{mkey}+{key}");
+
+        }
+
     }
 }

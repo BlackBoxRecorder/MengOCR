@@ -21,7 +21,7 @@ namespace MengOCR
         private Bitmap curBitmap;
         private readonly string SnapSaveDir = "";
         private readonly KeyboardHook k_hook = new KeyboardHook();
-
+        private readonly string keyBinding = "";
         private bool spaceSeparate = false;
 
         public MainForm()
@@ -37,6 +37,7 @@ namespace MengOCR
             engine = new PaddleOCREngine(config, oCRParameter);
 
             SnapSaveDir = StoreData.Instance.GetKeyVal<string>("snapSaveDir");
+            keyBinding = StoreData.Instance.GetKeyVal<string>("keyBinding");
 
             if (string.IsNullOrEmpty(SnapSaveDir))
             {//没有设置路径，设为默认
@@ -139,7 +140,6 @@ namespace MengOCR
                 snapForm.ScreenShotOk += new EventHandler(ScreenShotOk_Click);
 
                 snapForm.BackgroundImage = this.curBitmap;
-
                 snapForm.StartPosition = FormStartPosition.Manual;//起始位置
                 snapForm.ShowDialog();
                 snapForm.ScreenShotOk -= new EventHandler(ScreenShotOk_Click);
@@ -358,12 +358,29 @@ namespace MengOCR
 
         private void Hook_KeyDown(object sender, KeyEventArgs e)
         {
-            //判断按下的键（Alt + X）
-            if (e.KeyValue == (int)Keys.X && (int)Control.ModifierKeys == (int)Keys.Alt)
+            if (e.KeyCode == Keys.Escape &&
+                (snapForm.WindowState == FormWindowState.Maximized ||
+                !snapForm.IsDisposed ||
+                snapForm.TopMost))
             {
-                //截图
+                snapForm.Close();
+                snapForm.Dispose();
+                return;
+            }
+
+
+            if (string.IsNullOrEmpty(keyBinding) || !keyBinding.Contains("+"))
+            {
+                return;
+            }
+
+            var mkey = keyBinding.Split('+')[0];
+            var key = keyBinding.Split('+')[1];
+
+            if (e.KeyCode.ToString() == key && Control.ModifierKeys.ToString() == mkey)
+            {
                 TakeSnapshot();
-                Console.WriteLine($"{DateTime.Now} : 截图");
+                logger.Info($"{DateTime.Now} : 快捷键截图");
             }
         }
 

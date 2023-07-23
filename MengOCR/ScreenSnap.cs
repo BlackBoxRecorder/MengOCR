@@ -43,6 +43,7 @@ namespace MengOCR
             //当前窗口最大化，且不显示标题栏
             Rectangle ScreenArea = Screen.GetBounds(this);
             this.MaximumSize = new Size(ScreenArea.Width, ScreenArea.Height);
+            TopMost = true;
 
             this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;

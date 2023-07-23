@@ -36,6 +36,8 @@
             this.BtnSelectSaveDir = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.BtnRebuildStore = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.TxtKeybinding = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,6 +58,7 @@
             this.BtnSaveConfig.TabIndex = 0;
             this.BtnSaveConfig.Text = "确定";
             this.BtnSaveConfig.UseVisualStyleBackColor = true;
+            this.BtnSaveConfig.Click += new System.EventHandler(this.BtnSaveConfig_Click);
             // 
             // label1
             // 
@@ -101,11 +104,31 @@
             this.BtnRebuildStore.UseVisualStyleBackColor = true;
             this.BtnRebuildStore.Click += new System.EventHandler(this.BtnRebuildStore_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(39, 108);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(41, 12);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "快捷键";
+            // 
+            // TxtKeybinding
+            // 
+            this.TxtKeybinding.Location = new System.Drawing.Point(88, 104);
+            this.TxtKeybinding.Name = "TxtKeybinding";
+            this.TxtKeybinding.ReadOnly = true;
+            this.TxtKeybinding.Size = new System.Drawing.Size(144, 21);
+            this.TxtKeybinding.TabIndex = 7;
+            this.TxtKeybinding.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtKeybinding_KeyDown);
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(704, 441);
+            this.Controls.Add(this.TxtKeybinding);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.BtnRebuildStore);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.BtnSelectSaveDir);
@@ -134,5 +157,7 @@
         private System.Windows.Forms.Button BtnSelectSaveDir;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button BtnRebuildStore;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox TxtKeybinding;
     }
 }
