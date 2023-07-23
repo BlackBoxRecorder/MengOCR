@@ -59,6 +59,8 @@
             this.MenuFileList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuFileRename = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuFileDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.IconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.BtnIconMenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -73,6 +75,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PicBoxSnap)).BeginInit();
             this.StatusStripBar.SuspendLayout();
             this.MenuFileList.SuspendLayout();
+            this.IconMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainMenu
@@ -271,6 +274,7 @@
             // TxtOCRResult
             // 
             this.TxtOCRResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TxtOCRResult.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.TxtOCRResult.Location = new System.Drawing.Point(2, 2);
             this.TxtOCRResult.Margin = new System.Windows.Forms.Padding(20);
             this.TxtOCRResult.Name = "TxtOCRResult";
@@ -334,9 +338,11 @@
             // 
             // NotifyIconOCR
             // 
-            this.NotifyIconOCR.Text = "notifyIcon1";
+            this.NotifyIconOCR.Icon = ((System.Drawing.Icon)(resources.GetObject("NotifyIconOCR.Icon")));
+            this.NotifyIconOCR.Text = "萌萌哒OCR";
             this.NotifyIconOCR.Visible = true;
             this.NotifyIconOCR.Click += new System.EventHandler(this.NotifyIconOCR_Click);
+            this.NotifyIconOCR.DoubleClick += new System.EventHandler(this.NotifyIconOCR_Click);
             // 
             // MenuFileList
             // 
@@ -359,6 +365,20 @@
             this.MenuFileDelete.Size = new System.Drawing.Size(112, 22);
             this.MenuFileDelete.Text = "删除";
             this.MenuFileDelete.Click += new System.EventHandler(this.MenuFileDelete_Click);
+            // 
+            // IconMenu
+            // 
+            this.IconMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.BtnIconMenuExit});
+            this.IconMenu.Name = "IconMenu";
+            this.IconMenu.Size = new System.Drawing.Size(101, 26);
+            // 
+            // BtnIconMenuExit
+            // 
+            this.BtnIconMenuExit.Name = "BtnIconMenuExit";
+            this.BtnIconMenuExit.Size = new System.Drawing.Size(180, 22);
+            this.BtnIconMenuExit.Text = "退出";
+            this.BtnIconMenuExit.Click += new System.EventHandler(this.BtnIconMenuExit_Click);
             // 
             // MainForm
             // 
@@ -393,6 +413,7 @@
             this.StatusStripBar.ResumeLayout(false);
             this.StatusStripBar.PerformLayout();
             this.MenuFileList.ResumeLayout(false);
+            this.IconMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -429,6 +450,8 @@
         private System.Windows.Forms.ToolStripMenuItem BtnStateSpaceEnable;
         private System.Windows.Forms.ToolStripMenuItem MenuPdfOCR;
         private System.Windows.Forms.ToolStripMenuItem MenuVideoOCR;
+        private System.Windows.Forms.ContextMenuStrip IconMenu;
+        private System.Windows.Forms.ToolStripMenuItem BtnIconMenuExit;
     }
 }
 

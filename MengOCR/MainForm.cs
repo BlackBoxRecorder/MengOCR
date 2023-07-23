@@ -342,7 +342,7 @@ namespace MengOCR
         private async void MainForm_LoadAsync(object sender, EventArgs e)
         {
 
-            NotifyIconOCR.Visible = false;
+            NotifyIconOCR.Visible = true;
             ListBoxImgFiles.DisplayMember = "ImgFileName";
             ListBoxImgFiles.ValueMember = "ImgFileName";
 
@@ -353,6 +353,9 @@ namespace MengOCR
 
             k_hook.KeyDownEvent += new KeyEventHandler(Hook_KeyDown);//钩住键按下
             k_hook.Start();//安装键盘钩子
+
+            NotifyIconOCR.ContextMenuStrip = IconMenu;
+
         }
 
 
@@ -387,22 +390,13 @@ namespace MengOCR
 
         private void NotifyIconOCR_Click(object sender, EventArgs e)
         {
-            this.Visible = true;
             this.WindowState = FormWindowState.Normal;//窗口正常显示
             this.ShowInTaskbar = true;//在任务栏中显示该窗口
         }
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                NotifyIconOCR.Visible = true;
-                //ShowInTaskbar = false;
-            }
-            else
-            {
-                NotifyIconOCR.Visible = false;
-            }
+
         }
 
         private void BtnSnapshot_Click(object sender, EventArgs e)
@@ -717,6 +711,11 @@ namespace MengOCR
             {
                 ReBuildStore();
             }
+        }
+
+        private void BtnIconMenuExit_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
