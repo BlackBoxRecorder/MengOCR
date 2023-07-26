@@ -1,4 +1,5 @@
-﻿using MengOCR.Forms;
+﻿using ImageMagick;
+using MengOCR.Forms;
 using NLog;
 using PaddleOCRSharp;
 using System;
@@ -716,6 +717,28 @@ namespace MengOCR
         private void BtnIconMenuExit_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void BtnExportPdf_Click(object sender, EventArgs e)
+        {
+
+            MagickNET.SetGhostscriptDirectory(@"C:\yin-data\opensource\MengOCR\MengOCR\dll\");
+            using (var images = new MagickImageCollection())
+            {
+
+                var files = Directory.GetFiles(@"C:\Users\imyin\Pictures\MengOCR\默认工作区");
+
+                foreach (var file in files)
+                {
+                    images.Add(new MagickImage(file));
+                }
+
+                // Create pdf file with two pages
+                images.Write("test.pdf");
+            }
+
+
+
         }
     }
 }

@@ -61,6 +61,7 @@
             this.MenuFileDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.IconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BtnIconMenuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnExportPdf = new System.Windows.Forms.Button();
             this.MainMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -143,6 +144,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.BtnExportPdf);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.BtnRunOCR);
             this.panel1.Controls.Add(this.BtnCopyResult);
@@ -376,9 +378,19 @@
             // BtnIconMenuExit
             // 
             this.BtnIconMenuExit.Name = "BtnIconMenuExit";
-            this.BtnIconMenuExit.Size = new System.Drawing.Size(180, 22);
+            this.BtnIconMenuExit.Size = new System.Drawing.Size(100, 22);
             this.BtnIconMenuExit.Text = "退出";
             this.BtnIconMenuExit.Click += new System.EventHandler(this.BtnIconMenuExit_Click);
+            // 
+            // BtnExportPdf
+            // 
+            this.BtnExportPdf.Location = new System.Drawing.Point(414, 10);
+            this.BtnExportPdf.Name = "BtnExportPdf";
+            this.BtnExportPdf.Size = new System.Drawing.Size(75, 25);
+            this.BtnExportPdf.TabIndex = 5;
+            this.BtnExportPdf.Text = "导出PDF";
+            this.BtnExportPdf.UseVisualStyleBackColor = true;
+            this.BtnExportPdf.Click += new System.EventHandler(this.BtnExportPdf_Click);
             // 
             // MainForm
             // 
@@ -452,6 +464,7 @@
         private System.Windows.Forms.ToolStripMenuItem MenuVideoOCR;
         private System.Windows.Forms.ContextMenuStrip IconMenu;
         private System.Windows.Forms.ToolStripMenuItem BtnIconMenuExit;
+        private System.Windows.Forms.Button BtnExportPdf;
     }
 }
 

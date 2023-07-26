@@ -35,7 +35,7 @@
             // 
             // BtnOK
             // 
-            this.BtnOK.Location = new System.Drawing.Point(181, 50);
+            this.BtnOK.Location = new System.Drawing.Point(181, 27);
             this.BtnOK.Name = "BtnOK";
             this.BtnOK.Size = new System.Drawing.Size(75, 23);
             this.BtnOK.TabIndex = 0;
@@ -45,7 +45,7 @@
             // 
             // TextInput
             // 
-            this.TextInput.Location = new System.Drawing.Point(46, 50);
+            this.TextInput.Location = new System.Drawing.Point(46, 27);
             this.TextInput.Name = "TextInput";
             this.TextInput.Size = new System.Drawing.Size(129, 21);
             this.TextInput.TabIndex = 1;
@@ -54,7 +54,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(304, 121);
+            this.ClientSize = new System.Drawing.Size(304, 79);
             this.Controls.Add(this.TextInput);
             this.Controls.Add(this.BtnOK);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
