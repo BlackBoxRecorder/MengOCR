@@ -9,6 +9,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Image = System.Drawing.Image;
 
 namespace MengOCR
 {
@@ -721,52 +722,12 @@ namespace MengOCR
 
         private void BtnExportPdf_Click(object sender, EventArgs e)
         {
-            var dir = Directory.GetCurrentDirectory();
-            MagickNET.SetGhostscriptDirectory(Path.Combine(dir, "dll"));
-
-            var idx = CmbWorkspace.SelectedIndex;
-            var space = CmbWorkspace.Items[idx].ToString();
-
-            var imgdir = Path.Combine(SnapSaveDir, space);
-
-            if (!Directory.Exists(imgdir))
-            {
-                MessageBox.Show("工作区目录不存在");
-            }
 
 
-            using (var images = new MagickImageCollection())
-            {
 
+            var exportform = new ExportPdfForm();
+            exportform.ShowDialog(this);
 
-                var files = Directory.GetFiles(imgdir);
-
-                foreach (var file in files)
-                {
-                    images.Add(new MagickImage(file));
-                }
-
-                if (images.Count < 1)
-                {
-                    MessageBox.Show($"Failed to export {imgdir}");
-                }
-
-                //导出文件向导，勾选导出txt文本，选择导出路径，导出后打开
-                //统一图片分辨率，将图片放到白色背景上统一大小
-                //导出一张大图
-                //排序
-
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.FileName = $"{space}.pdf";
-                var res = saveFileDialog.ShowDialog();
-                if (res == DialogResult.OK)
-                {
-                    images.Write(saveFileDialog.FileName);
-
-
-                }
-
-            }
 
 
 
