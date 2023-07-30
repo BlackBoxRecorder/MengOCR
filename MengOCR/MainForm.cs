@@ -723,7 +723,7 @@ namespace MengOCR
         private void BtnExportPdf_Click(object sender, EventArgs e)
         {
 
-
+            //Utils.ImgTest();
 
             var exportform = new ExportPdfForm();
             exportform.ShowDialog(this);

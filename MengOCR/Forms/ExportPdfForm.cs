@@ -20,6 +20,8 @@ namespace MengOCR.Forms
         {
             try
             {
+                LblExportInfo.Text = "";
+
                 var spaces = StoreData.Instance.GetWorkspaceAsync();
 
                 foreach (var item in spaces)
@@ -64,8 +66,6 @@ namespace MengOCR.Forms
             }
         }
 
-
-
         private void Export()
         {
             var dir = Directory.GetCurrentDirectory();
@@ -107,11 +107,9 @@ namespace MengOCR.Forms
 
             if (bgwidth < maxwidth)
             {//要对图片进行缩放
-                //TODO
+             //TODO
             }
-
-
-
+            string exportpath = "";
             var bgcolor = MagickColor.FromRgb(SelectedBgColor.R, SelectedBgColor.G, SelectedBgColor.B);
             using (var images = new MagickImageCollection())
             {
@@ -131,31 +129,70 @@ namespace MengOCR.Forms
                     return;
                 }
 
-                //导出文件向导，勾选导出txt文本，选择导出路径，导出后打开
-                //统一图片分辨率，将图片放到白色背景上统一大小
-                //导出一张大图
-                //排序
+                if (CkbImgOrder.Checked)
+                {
+                    images.Reverse();
+                }
 
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.FileName = $"{space}.pdf";
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    FileName = $"{space}.pdf"
+                };
                 var res = saveFileDialog.ShowDialog();
                 if (res == DialogResult.OK)
                 {
-                    images.Write(saveFileDialog.FileName);
+                    exportpath = saveFileDialog.FileName;
+                    images.Write(exportpath);
                 }
 
             }
 
             if (CkbExportText.Checked)
             {
+                string restxt = string.Empty;
 
+                //读取当前工作区的识别结果
+                var items = StoreData.Instance.GetOCRItemsByWorkspace(space);
+                foreach (var item in items)
+                {
+                    restxt += item.ContentTxt;
+                    restxt += "\n";
+                }
+
+                File.WriteAllText($"{exportpath.Replace(".pdf", "")}.txt", restxt);
             }
 
         }
 
         private void BtnExport_Click(object sender, EventArgs e)
         {
-            Export();
+            try
+            {
+                LblExportInfo.Text = "正在导出，请稍等...";
+                BtnExport.Enabled = false;
+                Export();
+                LblExportInfo.Text = "导出成功";
+            }
+            catch (Exception ex)
+            {
+                LblExportInfo.Text = $"导出错误:{ex.Message}";
+            }
+            BtnExport.Enabled = true;
+
+        }
+
+        private void CmbSetPageWidth_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var show = CmbSetPageWidth.SelectedIndex > 0;
+            if (show)
+            {
+                TxtSetWidth.Visible = true;
+                TxtSetWidth.Text = "1280";
+            }
+            else
+            {
+                TxtSetWidth.Visible = false;
+            }
         }
     }
 }

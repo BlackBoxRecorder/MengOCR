@@ -1,4 +1,5 @@
-﻿using PaddleOCRSharp;
+﻿using ImageMagick;
+using PaddleOCRSharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -152,7 +153,36 @@ namespace MengOCR
         }
 
 
+        public static void ImgTest()
+        {
+            try
+            {
+                string imgtest = @"C:\Users\imyin\Pictures\MengOCR\默认工作区\2023-6-23 17.47.34.png";
+                string imgwall = @"C:\yin-data\images\ImageOnline\1920×1080\0c47d355621d442d9c66c6f0232b0f81.jpg";
 
+                var img = new MagickImage(imgtest);
+
+                //img.BackgroundColor = MagickColor.FromRgb(0, 0xff, 0);
+                var tiles = img.CropToTiles(198, 108);//切片
+                img.Trim();
+                //获取boundbox，计算边缘颜色
+
+                img.Write("test.jpg");
+                int idx = 0;
+                foreach (var tile in tiles)
+                {
+                    idx++;
+                    //tile.Write($"test{idx}.jpg");
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
 
 
     }

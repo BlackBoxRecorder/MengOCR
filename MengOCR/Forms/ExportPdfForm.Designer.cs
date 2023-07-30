@@ -43,6 +43,9 @@
             this.BtnColorPicker = new System.Windows.Forms.Button();
             this.BtnSelectExportPath = new System.Windows.Forms.Button();
             this.ColorSelectedIcon = new System.Windows.Forms.Panel();
+            this.LblExportInfo = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.CkbImgOrder = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -105,7 +108,7 @@
             this.TxtExportPath.Location = new System.Drawing.Point(120, 61);
             this.TxtExportPath.MaximumSize = new System.Drawing.Size(300, 25);
             this.TxtExportPath.Name = "TxtExportPath";
-            this.TxtExportPath.Size = new System.Drawing.Size(300, 25);
+            this.TxtExportPath.Size = new System.Drawing.Size(300, 26);
             this.TxtExportPath.TabIndex = 6;
             // 
             // CmbSetPageWidth
@@ -116,6 +119,7 @@
             this.CmbSetPageWidth.Name = "CmbSetPageWidth";
             this.CmbSetPageWidth.Size = new System.Drawing.Size(143, 24);
             this.CmbSetPageWidth.TabIndex = 7;
+            this.CmbSetPageWidth.SelectedIndexChanged += new System.EventHandler(this.CmbSetPageWidth_SelectedIndexChanged);
             // 
             // TxtSetWidth
             // 
@@ -137,7 +141,7 @@
             // 
             // BtnExport
             // 
-            this.BtnExport.Location = new System.Drawing.Point(441, 249);
+            this.BtnExport.Location = new System.Drawing.Point(449, 256);
             this.BtnExport.Name = "BtnExport";
             this.BtnExport.Size = new System.Drawing.Size(75, 25);
             this.BtnExport.TabIndex = 10;
@@ -172,11 +176,42 @@
             this.ColorSelectedIcon.Size = new System.Drawing.Size(25, 25);
             this.ColorSelectedIcon.TabIndex = 13;
             // 
+            // LblExportInfo
+            // 
+            this.LblExportInfo.AutoSize = true;
+            this.LblExportInfo.Location = new System.Drawing.Point(118, 262);
+            this.LblExportInfo.Name = "LblExportInfo";
+            this.LblExportInfo.Size = new System.Drawing.Size(119, 12);
+            this.LblExportInfo.TabIndex = 14;
+            this.LblExportInfo.Text = "正在导出，请稍后...";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(36, 223);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(53, 12);
+            this.label7.TabIndex = 15;
+            this.label7.Text = "图片排序";
+            // 
+            // CkbImgOrder
+            // 
+            this.CkbImgOrder.AutoSize = true;
+            this.CkbImgOrder.Location = new System.Drawing.Point(120, 220);
+            this.CkbImgOrder.Name = "CkbImgOrder";
+            this.CkbImgOrder.Size = new System.Drawing.Size(72, 16);
+            this.CkbImgOrder.TabIndex = 16;
+            this.CkbImgOrder.Text = "逆序导出";
+            this.CkbImgOrder.UseVisualStyleBackColor = true;
+            // 
             // ExportPdfForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(549, 296);
+            this.Controls.Add(this.CkbImgOrder);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.LblExportInfo);
             this.Controls.Add(this.ColorSelectedIcon);
             this.Controls.Add(this.BtnSelectExportPath);
             this.Controls.Add(this.BtnColorPicker);
@@ -219,5 +254,8 @@
         private System.Windows.Forms.Button BtnColorPicker;
         private System.Windows.Forms.Button BtnSelectExportPath;
         private System.Windows.Forms.Panel ColorSelectedIcon;
+        private System.Windows.Forms.Label LblExportInfo;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox CkbImgOrder;
     }
 }
