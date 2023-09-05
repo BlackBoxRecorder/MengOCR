@@ -84,6 +84,7 @@
             this.BtnSelectSaveDir.TabIndex = 3;
             this.BtnSelectSaveDir.Text = "浏览";
             this.BtnSelectSaveDir.UseVisualStyleBackColor = true;
+            this.BtnSelectSaveDir.Click += new System.EventHandler(this.BtnSelectSaveDir_Click);
             // 
             // label2
             // 

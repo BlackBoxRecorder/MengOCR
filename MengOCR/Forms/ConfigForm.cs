@@ -48,6 +48,7 @@ namespace MengOCR.Forms
         private void BtnSaveConfig_Click(object sender, EventArgs e)
         {
 
+            StoreData.Instance.SetKeyVal<string>("snapSaveDir", TxtSnapSaveDir.Text);
 
 
             Close();
@@ -81,5 +82,18 @@ namespace MengOCR.Forms
 
         }
 
+        private void BtnSelectSaveDir_Click(object sender, EventArgs e)
+        {
+
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                TxtSnapSaveDir.Text = folderBrowserDialog.SelectedPath;
+            }
+
+
+
+        }
     }
 }

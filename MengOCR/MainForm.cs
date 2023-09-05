@@ -18,47 +18,28 @@ namespace MengOCR
         public static readonly Logger logger = LogManager.GetLogger("MainForm");
 
         private readonly FileSystemWatcher FsWatcher = new FileSystemWatcher();
-        private readonly PaddleOCREngine engine;
+        private PaddleOCREngine engine;
         private ScreenSnap snapForm;
         private Bitmap curBitmap;
-        private readonly string SnapSaveDir = "";
+        private string SnapSaveDir = "";
         private readonly KeyboardHook k_hook = new KeyboardHook();
-        private readonly string keyBinding = "";
+        private string keyBinding = "";
         private bool spaceSeparate = false;
 
         public MainForm()
         {
             InitializeComponent();
-
             StartPosition = FormStartPosition.CenterScreen;
+        }
 
-            OCRModelConfig config = null;
-
-            OCRParameter oCRParameter = new OCRParameter();
-
-            engine = new PaddleOCREngine(config, oCRParameter);
-
-            SnapSaveDir = StoreData.Instance.GetKeyVal<string>("snapSaveDir");
-            keyBinding = StoreData.Instance.GetKeyVal<string>("keyBinding");
-
-            if (string.IsNullOrEmpty(SnapSaveDir))
-            {//没有设置路径，设为默认
-                var userPicDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-                SnapSaveDir = Path.Combine(userPicDir, "MengOCR");
-
-                StoreData.Instance.SetKeyVal<string>("snapSaveDir", SnapSaveDir);
-            }
-            else
+        private void InitOCR()
+        {
+            Task.Run(() =>
             {
-
-            }
-
-            if (!Directory.Exists(SnapSaveDir))
-            {
-                Directory.CreateDirectory(SnapSaveDir);
-            }
-
-            OnFsChanges();
+                OCRModelConfig config = null;
+                OCRParameter oCRParameter = new OCRParameter();
+                engine = new PaddleOCREngine(config, oCRParameter);
+            });
         }
 
         private void OnFsChanges()
@@ -343,6 +324,24 @@ namespace MengOCR
 
         private async void MainForm_LoadAsync(object sender, EventArgs e)
         {
+            InitOCR();
+
+            SnapSaveDir = StoreData.Instance.GetKeyVal<string>("snapSaveDir");
+            keyBinding = StoreData.Instance.GetKeyVal<string>("keyBinding");
+
+            if (string.IsNullOrEmpty(SnapSaveDir))
+            {//没有设置路径，设为默认
+                var userPicDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                SnapSaveDir = Path.Combine(userPicDir, "MengOCR");
+                StoreData.Instance.SetKeyVal<string>("snapSaveDir", SnapSaveDir);
+            }
+
+            if (!Directory.Exists(SnapSaveDir))
+            {
+                Directory.CreateDirectory(SnapSaveDir);
+            }
+
+            OnFsChanges();
 
             NotifyIconOCR.Visible = true;
             ListBoxImgFiles.DisplayMember = "ImgFileName";
