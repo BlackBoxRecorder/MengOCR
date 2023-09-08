@@ -36,9 +36,8 @@
             this.MenuRenameWorkSpace = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuDelWorkspace = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuConfig = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuPdfOCR = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuVideoOCR = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.BtnExportPdf = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.BtnSearch = new System.Windows.Forms.Button();
             this.TxtKeyword = new System.Windows.Forms.TextBox();
@@ -61,7 +60,6 @@
             this.MenuFileDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.IconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.BtnIconMenuExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.BtnExportPdf = new System.Windows.Forms.Button();
             this.MainMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -83,9 +81,7 @@
             // 
             this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuWorkspace,
-            this.MenuConfig,
-            this.MenuPdfOCR,
-            this.MenuVideoOCR});
+            this.MenuConfig});
             this.MainMenu.Location = new System.Drawing.Point(0, 0);
             this.MainMenu.Name = "MainMenu";
             this.MainMenu.Size = new System.Drawing.Size(944, 25);
@@ -105,21 +101,21 @@
             // MenuNewWorkspace
             // 
             this.MenuNewWorkspace.Name = "MenuNewWorkspace";
-            this.MenuNewWorkspace.Size = new System.Drawing.Size(112, 22);
+            this.MenuNewWorkspace.Size = new System.Drawing.Size(180, 22);
             this.MenuNewWorkspace.Text = "新建";
             this.MenuNewWorkspace.Click += new System.EventHandler(this.MenuNewWorkspace_Click);
             // 
             // MenuRenameWorkSpace
             // 
             this.MenuRenameWorkSpace.Name = "MenuRenameWorkSpace";
-            this.MenuRenameWorkSpace.Size = new System.Drawing.Size(112, 22);
+            this.MenuRenameWorkSpace.Size = new System.Drawing.Size(180, 22);
             this.MenuRenameWorkSpace.Text = "重命名";
             this.MenuRenameWorkSpace.Click += new System.EventHandler(this.MenuRenameWorkSpace_Click);
             // 
             // MenuDelWorkspace
             // 
             this.MenuDelWorkspace.Name = "MenuDelWorkspace";
-            this.MenuDelWorkspace.Size = new System.Drawing.Size(112, 22);
+            this.MenuDelWorkspace.Size = new System.Drawing.Size(180, 22);
             this.MenuDelWorkspace.Text = "删除";
             this.MenuDelWorkspace.Click += new System.EventHandler(this.MenuDelWorkspace_Click);
             // 
@@ -129,18 +125,6 @@
             this.MenuConfig.Size = new System.Drawing.Size(44, 21);
             this.MenuConfig.Text = "设置";
             this.MenuConfig.Click += new System.EventHandler(this.MenuConfig_Click);
-            // 
-            // MenuPdfOCR
-            // 
-            this.MenuPdfOCR.Name = "MenuPdfOCR";
-            this.MenuPdfOCR.Size = new System.Drawing.Size(66, 21);
-            this.MenuPdfOCR.Text = "PDF识别";
-            // 
-            // MenuVideoOCR
-            // 
-            this.MenuVideoOCR.Name = "MenuVideoOCR";
-            this.MenuVideoOCR.Size = new System.Drawing.Size(70, 21);
-            this.MenuVideoOCR.Text = "视频OCR";
             // 
             // panel1
             // 
@@ -155,6 +139,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(944, 44);
             this.panel1.TabIndex = 1;
+            // 
+            // BtnExportPdf
+            // 
+            this.BtnExportPdf.Location = new System.Drawing.Point(414, 10);
+            this.BtnExportPdf.Name = "BtnExportPdf";
+            this.BtnExportPdf.Size = new System.Drawing.Size(75, 25);
+            this.BtnExportPdf.TabIndex = 5;
+            this.BtnExportPdf.Text = "导出PDF";
+            this.BtnExportPdf.UseVisualStyleBackColor = true;
+            this.BtnExportPdf.Click += new System.EventHandler(this.BtnExportPdf_Click);
             // 
             // panel2
             // 
@@ -316,7 +310,7 @@
             this.BtnStateSpaceSeparate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.BtnStateSpaceSeparate.Name = "BtnStateSpaceSeparate";
             this.BtnStateSpaceSeparate.Size = new System.Drawing.Size(69, 21);
-            this.BtnStateSpaceSeparate.Text = "空格分隔";
+            this.BtnStateSpaceSeparate.Text = "表格识别";
             this.BtnStateSpaceSeparate.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
             this.BtnStateSpaceSeparate.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.BtnStateSpaceSeparate_DropDownItemClicked);
             // 
@@ -381,16 +375,6 @@
             this.BtnIconMenuExit.Size = new System.Drawing.Size(100, 22);
             this.BtnIconMenuExit.Text = "退出";
             this.BtnIconMenuExit.Click += new System.EventHandler(this.BtnIconMenuExit_Click);
-            // 
-            // BtnExportPdf
-            // 
-            this.BtnExportPdf.Location = new System.Drawing.Point(414, 10);
-            this.BtnExportPdf.Name = "BtnExportPdf";
-            this.BtnExportPdf.Size = new System.Drawing.Size(75, 25);
-            this.BtnExportPdf.TabIndex = 5;
-            this.BtnExportPdf.Text = "导出PDF";
-            this.BtnExportPdf.UseVisualStyleBackColor = true;
-            this.BtnExportPdf.Click += new System.EventHandler(this.BtnExportPdf_Click);
             // 
             // MainForm
             // 
@@ -460,8 +444,6 @@
         private System.Windows.Forms.ToolStripDropDownButton BtnStateSpaceSeparate;
         private System.Windows.Forms.ToolStripMenuItem BtnStateSpaceDisable;
         private System.Windows.Forms.ToolStripMenuItem BtnStateSpaceEnable;
-        private System.Windows.Forms.ToolStripMenuItem MenuPdfOCR;
-        private System.Windows.Forms.ToolStripMenuItem MenuVideoOCR;
         private System.Windows.Forms.ContextMenuStrip IconMenu;
         private System.Windows.Forms.ToolStripMenuItem BtnIconMenuExit;
         private System.Windows.Forms.Button BtnExportPdf;
