@@ -141,7 +141,7 @@
             this.RBtnShowMain.TabStop = true;
             this.RBtnShowMain.Text = "显示主窗口";
             this.RBtnShowMain.UseVisualStyleBackColor = true;
-            this.RBtnShowMain.CheckedChanged += new System.EventHandler(this.RBtnShowMain_CheckedChanged);
+            this.RBtnShowMain.Click += new System.EventHandler(this.OnShowOrNotify_Click);
             // 
             // RBtnNotify
             // 
@@ -153,7 +153,7 @@
             this.RBtnNotify.TabStop = true;
             this.RBtnNotify.Text = "截图提醒";
             this.RBtnNotify.UseVisualStyleBackColor = true;
-            this.RBtnNotify.CheckedChanged += new System.EventHandler(this.RBtnNotify_CheckedChanged);
+            this.RBtnNotify.Click += new System.EventHandler(this.OnShowOrNotify_Click);
             // 
             // RBtnClose
             // 
@@ -165,7 +165,7 @@
             this.RBtnClose.TabStop = true;
             this.RBtnClose.Text = "退出程序";
             this.RBtnClose.UseVisualStyleBackColor = true;
-            this.RBtnClose.CheckedChanged += new System.EventHandler(this.RBtnClose_CheckedChanged);
+            this.RBtnClose.Click += new System.EventHandler(this.OnCloseMinimize_Click);
             // 
             // RBtnMini
             // 
@@ -177,7 +177,7 @@
             this.RBtnMini.TabStop = true;
             this.RBtnMini.Text = "最小化到托盘";
             this.RBtnMini.UseVisualStyleBackColor = true;
-            this.RBtnMini.CheckedChanged += new System.EventHandler(this.RBtnMini_CheckedChanged);
+            this.RBtnMini.Click += new System.EventHandler(this.OnCloseMinimize_Click);
             // 
             // GroupCloseOpt
             // 
