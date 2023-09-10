@@ -101,21 +101,21 @@
             // MenuNewWorkspace
             // 
             this.MenuNewWorkspace.Name = "MenuNewWorkspace";
-            this.MenuNewWorkspace.Size = new System.Drawing.Size(180, 22);
+            this.MenuNewWorkspace.Size = new System.Drawing.Size(112, 22);
             this.MenuNewWorkspace.Text = "新建";
             this.MenuNewWorkspace.Click += new System.EventHandler(this.MenuNewWorkspace_Click);
             // 
             // MenuRenameWorkSpace
             // 
             this.MenuRenameWorkSpace.Name = "MenuRenameWorkSpace";
-            this.MenuRenameWorkSpace.Size = new System.Drawing.Size(180, 22);
+            this.MenuRenameWorkSpace.Size = new System.Drawing.Size(112, 22);
             this.MenuRenameWorkSpace.Text = "重命名";
             this.MenuRenameWorkSpace.Click += new System.EventHandler(this.MenuRenameWorkSpace_Click);
             // 
             // MenuDelWorkspace
             // 
             this.MenuDelWorkspace.Name = "MenuDelWorkspace";
-            this.MenuDelWorkspace.Size = new System.Drawing.Size(180, 22);
+            this.MenuDelWorkspace.Size = new System.Drawing.Size(112, 22);
             this.MenuDelWorkspace.Text = "删除";
             this.MenuDelWorkspace.Click += new System.EventHandler(this.MenuDelWorkspace_Click);
             // 
@@ -337,7 +337,6 @@
             this.NotifyIconOCR.Icon = ((System.Drawing.Icon)(resources.GetObject("NotifyIconOCR.Icon")));
             this.NotifyIconOCR.Text = "萌萌哒OCR";
             this.NotifyIconOCR.Visible = true;
-            this.NotifyIconOCR.Click += new System.EventHandler(this.NotifyIconOCR_Click);
             this.NotifyIconOCR.DoubleClick += new System.EventHandler(this.NotifyIconOCR_Click);
             // 
             // MenuFileList

@@ -1,5 +1,4 @@
-﻿using ImageMagick;
-using MengOCR.Forms;
+﻿using MengOCR.Forms;
 using NLog;
 using PaddleOCRSharp;
 using System;
@@ -25,6 +24,7 @@ namespace MengOCR
         private readonly KeyboardHook k_hook = new KeyboardHook();
         private string keyBinding = "";
         private bool spaceSeparate = false;
+        private bool isExit = false;
 
         public MainForm()
         {
@@ -391,6 +391,7 @@ namespace MengOCR
 
         private void NotifyIconOCR_Click(object sender, EventArgs e)
         {
+            this.Visible = true;
             this.WindowState = FormWindowState.Normal;//窗口正常显示
             this.ShowInTaskbar = true;//在任务栏中显示该窗口
         }
@@ -465,9 +466,27 @@ namespace MengOCR
         {
             try
             {
-                engine.Dispose();
-                k_hook.KeyDownEvent -= new KeyEventHandler(Hook_KeyDown);
-                k_hook.Stop();
+
+                var opt = StoreData.Instance.GetKeyVal<bool>("closeExit");
+                if (opt == true || isExit)
+                {
+                    engine.Dispose();
+                    k_hook.KeyDownEvent -= new KeyEventHandler(Hook_KeyDown);
+                    k_hook.Stop();
+                }
+                else
+                {
+                    if (e.CloseReason == CloseReason.UserClosing)
+                    {
+                        //是否取消close操作
+                        e.Cancel = true;
+                        //this.WindowState = FormWindowState.Minimized;
+                        this.Visible = false;
+                        //图标显示在托盘区
+                        NotifyIconOCR.Visible = true;
+                        NotifyIconOCR.ShowBalloonTip(2000, "提示", "双击图标显示主窗口", ToolTipIcon.Info);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -716,6 +735,7 @@ namespace MengOCR
 
         private void BtnIconMenuExit_Click(object sender, EventArgs e)
         {
+            isExit = true;
             Close();
         }
 

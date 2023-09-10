@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MengOCR.Forms
@@ -47,12 +40,7 @@ namespace MengOCR.Forms
 
         private void BtnSaveConfig_Click(object sender, EventArgs e)
         {
-
-            StoreData.Instance.SetKeyVal<string>("snapSaveDir", TxtSnapSaveDir.Text);
-
-
             Close();
-
         }
 
         private void TxtKeybinding_KeyDown(object sender, KeyEventArgs e)
@@ -92,8 +80,60 @@ namespace MengOCR.Forms
                 TxtSnapSaveDir.Text = folderBrowserDialog.SelectedPath;
             }
 
+            StoreData.Instance.SetKeyVal<string>("snapSaveDir", TxtSnapSaveDir.Text);
+        }
 
+        private void RBtnMini_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            if (rb != null && rb.Checked)
+            {
+                StoreData.Instance.SetKeyVal<bool>("closeExit", false);
+            }
+            else
+            {
+                MessageBox.Show("不是RadioButton");
+            }
 
+        }
+
+        private void RBtnClose_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            if (rb != null && rb.Checked)
+            {
+                StoreData.Instance.SetKeyVal<bool>("closeExit", true);
+            }
+            else
+            {
+                MessageBox.Show("不是RadioButton");
+            }
+        }
+
+        private void RBtnShowMain_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            if (rb != null && rb.Checked)
+            {
+                StoreData.Instance.SetKeyVal<bool>("snapShowMain", true);
+            }
+            else
+            {
+                MessageBox.Show("不是RadioButton");
+            }
+        }
+
+        private void RBtnNotify_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            if (rb != null && rb.Checked)
+            {
+                StoreData.Instance.SetKeyVal<bool>("snapShowMain", false);
+            }
+            else
+            {
+                MessageBox.Show("不是RadioButton");
+            }
         }
     }
 }
