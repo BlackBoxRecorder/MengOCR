@@ -66,6 +66,18 @@ namespace MengOCR
 
         }
 
+        public bool HasKey(string key)
+        {
+            try
+            {
+                return store.GetKeys().ContainsKey(key);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// 清空store
         /// </summary>

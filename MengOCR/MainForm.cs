@@ -476,8 +476,16 @@ namespace MengOCR
         {
             try
             {
+                bool opt;
+                if (StoreData.Instance.HasKey(StoreKeys.CloseExit))
+                {
+                    opt = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
+                }
+                else
+                {
+                    opt = false;
+                }
 
-                var opt = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
                 if (opt == true || isExit)
                 {
                     engine.Dispose();
@@ -733,9 +741,14 @@ namespace MengOCR
             form.ShowDialog(this);
             form.RebuildStoreClick -= Form_RebuildStoreClick;
 
-            isShowMain = StoreData.Instance.GetKeyVal<bool>(StoreKeys.SnapShowMain);
-            isExit = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
-
+            if (StoreData.Instance.HasKey(StoreKeys.CloseExit))
+            {
+                isExit = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
+            }
+            if (StoreData.Instance.HasKey(StoreKeys.SnapShowMain))
+            {
+                isShowMain = StoreData.Instance.GetKeyVal<bool>(StoreKeys.SnapShowMain);
+            }
 
         }
 

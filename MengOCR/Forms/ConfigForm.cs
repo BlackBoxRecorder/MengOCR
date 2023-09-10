@@ -31,6 +31,35 @@ namespace MengOCR.Forms
                 string keyBinding = StoreData.Instance.GetKeyVal<string>(StoreKeys.KeyBingding);
                 TxtKeybinding.Text = keyBinding;
 
+                if (StoreData.Instance.HasKey(StoreKeys.SnapShowMain))
+                {
+                    var b = StoreData.Instance.GetKeyVal<bool>(StoreKeys.SnapShowMain);
+                    if (b)
+                    {
+                        RBtnShowMain.Checked = true;
+                        RBtnNotify.Checked = false;
+                    }
+                    else
+                    {
+                        RBtnShowMain.Checked = false;
+                        RBtnNotify.Checked = true;
+                    }
+                }
+
+                if (StoreData.Instance.HasKey(StoreKeys.CloseExit))
+                {
+                    var b = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
+                    if (b)
+                    {
+                        RBtnClose.Checked = true;
+                        RBtnMini.Checked = false;
+                    }
+                    else
+                    {
+                        RBtnClose.Checked = false;
+                        RBtnMini.Checked = true;
+                    }
+                }
             }
             catch (Exception)
             {
