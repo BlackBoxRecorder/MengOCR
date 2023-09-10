@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MengOCR.Forms
@@ -32,12 +25,41 @@ namespace MengOCR.Forms
         {
             try
             {
-                string SnapSaveDir = StoreData.Instance.GetKeyVal<string>("snapSaveDir");
+                string SnapSaveDir = StoreData.Instance.GetKeyVal<string>(StoreKeys.SnapSaveDir);
                 TxtSnapSaveDir.Text = SnapSaveDir;
 
-                string keyBinding = StoreData.Instance.GetKeyVal<string>("keyBinding");
+                string keyBinding = StoreData.Instance.GetKeyVal<string>(StoreKeys.KeyBingding);
                 TxtKeybinding.Text = keyBinding;
 
+                if (StoreData.Instance.HasKey(StoreKeys.SnapShowMain))
+                {
+                    var b = StoreData.Instance.GetKeyVal<bool>(StoreKeys.SnapShowMain);
+                    if (b)
+                    {
+                        RBtnShowMain.Checked = true;
+                        RBtnNotify.Checked = false;
+                    }
+                    else
+                    {
+                        RBtnShowMain.Checked = false;
+                        RBtnNotify.Checked = true;
+                    }
+                }
+
+                if (StoreData.Instance.HasKey(StoreKeys.CloseExit))
+                {
+                    var b = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
+                    if (b)
+                    {
+                        RBtnClose.Checked = true;
+                        RBtnMini.Checked = false;
+                    }
+                    else
+                    {
+                        RBtnClose.Checked = false;
+                        RBtnMini.Checked = true;
+                    }
+                }
             }
             catch (Exception)
             {
@@ -47,12 +69,34 @@ namespace MengOCR.Forms
 
         private void BtnSaveConfig_Click(object sender, EventArgs e)
         {
-
-            StoreData.Instance.SetKeyVal<string>("snapSaveDir", TxtSnapSaveDir.Text);
-
-
             Close();
+        }
 
+
+        private void OnCloseMinimize_Click(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            if (rb != null && rb.Checked && rb.Name == "RBtnClose")
+            {
+                StoreData.Instance.SetKeyVal<bool>(StoreKeys.CloseExit, true);
+            }
+            else
+            {
+                StoreData.Instance.SetKeyVal<bool>(StoreKeys.CloseExit, false);
+            }
+        }
+
+        private void OnShowOrNotify_Click(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            if (rb != null && rb.Checked && rb.Name == "RBtnShowMain")
+            {
+                StoreData.Instance.SetKeyVal<bool>(StoreKeys.SnapShowMain, true);
+            }
+            else
+            {
+                StoreData.Instance.SetKeyVal<bool>(StoreKeys.SnapShowMain, false);
+            }
         }
 
         private void TxtKeybinding_KeyDown(object sender, KeyEventArgs e)
@@ -78,7 +122,7 @@ namespace MengOCR.Forms
             var key = e.KeyCode;
             TxtKeybinding.Text = $"{mkey} + {key}";
 
-            StoreData.Instance.SetKeyVal<string>("keyBinding", $"{mkey}+{key}");
+            StoreData.Instance.SetKeyVal<string>(StoreKeys.KeyBingding, $"{mkey}+{key}");
 
         }
 
@@ -92,8 +136,8 @@ namespace MengOCR.Forms
                 TxtSnapSaveDir.Text = folderBrowserDialog.SelectedPath;
             }
 
-
-
+            StoreData.Instance.SetKeyVal<string>(StoreKeys.SnapSaveDir, TxtSnapSaveDir.Text);
         }
+
     }
 }

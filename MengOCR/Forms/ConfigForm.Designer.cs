@@ -38,7 +38,15 @@
             this.BtnRebuildStore = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.TxtKeybinding = new System.Windows.Forms.TextBox();
+            this.RBtnShowMain = new System.Windows.Forms.RadioButton();
+            this.RBtnNotify = new System.Windows.Forms.RadioButton();
+            this.RBtnClose = new System.Windows.Forms.RadioButton();
+            this.RBtnMini = new System.Windows.Forms.RadioButton();
+            this.GroupCloseOpt = new System.Windows.Forms.GroupBox();
+            this.GroupSnapOpt = new System.Windows.Forms.GroupBox();
             this.panel1.SuspendLayout();
+            this.GroupCloseOpt.SuspendLayout();
+            this.GroupSnapOpt.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -123,11 +131,83 @@
             this.TxtKeybinding.TabIndex = 7;
             this.TxtKeybinding.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtKeybinding_KeyDown);
             // 
+            // RBtnShowMain
+            // 
+            this.RBtnShowMain.AutoSize = true;
+            this.RBtnShowMain.Location = new System.Drawing.Point(26, 32);
+            this.RBtnShowMain.Name = "RBtnShowMain";
+            this.RBtnShowMain.Size = new System.Drawing.Size(83, 16);
+            this.RBtnShowMain.TabIndex = 9;
+            this.RBtnShowMain.TabStop = true;
+            this.RBtnShowMain.Text = "显示主窗口";
+            this.RBtnShowMain.UseVisualStyleBackColor = true;
+            this.RBtnShowMain.Click += new System.EventHandler(this.OnShowOrNotify_Click);
+            // 
+            // RBtnNotify
+            // 
+            this.RBtnNotify.AutoSize = true;
+            this.RBtnNotify.Location = new System.Drawing.Point(135, 32);
+            this.RBtnNotify.Name = "RBtnNotify";
+            this.RBtnNotify.Size = new System.Drawing.Size(71, 16);
+            this.RBtnNotify.TabIndex = 10;
+            this.RBtnNotify.TabStop = true;
+            this.RBtnNotify.Text = "截图提醒";
+            this.RBtnNotify.UseVisualStyleBackColor = true;
+            this.RBtnNotify.Click += new System.EventHandler(this.OnShowOrNotify_Click);
+            // 
+            // RBtnClose
+            // 
+            this.RBtnClose.AutoSize = true;
+            this.RBtnClose.Location = new System.Drawing.Point(24, 32);
+            this.RBtnClose.Name = "RBtnClose";
+            this.RBtnClose.Size = new System.Drawing.Size(71, 16);
+            this.RBtnClose.TabIndex = 12;
+            this.RBtnClose.TabStop = true;
+            this.RBtnClose.Text = "退出程序";
+            this.RBtnClose.UseVisualStyleBackColor = true;
+            this.RBtnClose.Click += new System.EventHandler(this.OnCloseMinimize_Click);
+            // 
+            // RBtnMini
+            // 
+            this.RBtnMini.AutoSize = true;
+            this.RBtnMini.Location = new System.Drawing.Point(132, 32);
+            this.RBtnMini.Name = "RBtnMini";
+            this.RBtnMini.Size = new System.Drawing.Size(95, 16);
+            this.RBtnMini.TabIndex = 13;
+            this.RBtnMini.TabStop = true;
+            this.RBtnMini.Text = "最小化到托盘";
+            this.RBtnMini.UseVisualStyleBackColor = true;
+            this.RBtnMini.Click += new System.EventHandler(this.OnCloseMinimize_Click);
+            // 
+            // GroupCloseOpt
+            // 
+            this.GroupCloseOpt.Controls.Add(this.RBtnClose);
+            this.GroupCloseOpt.Controls.Add(this.RBtnMini);
+            this.GroupCloseOpt.Location = new System.Drawing.Point(31, 141);
+            this.GroupCloseOpt.Name = "GroupCloseOpt";
+            this.GroupCloseOpt.Size = new System.Drawing.Size(249, 66);
+            this.GroupCloseOpt.TabIndex = 14;
+            this.GroupCloseOpt.TabStop = false;
+            this.GroupCloseOpt.Text = "关闭按钮";
+            // 
+            // GroupSnapOpt
+            // 
+            this.GroupSnapOpt.Controls.Add(this.RBtnShowMain);
+            this.GroupSnapOpt.Controls.Add(this.RBtnNotify);
+            this.GroupSnapOpt.Location = new System.Drawing.Point(303, 141);
+            this.GroupSnapOpt.Name = "GroupSnapOpt";
+            this.GroupSnapOpt.Size = new System.Drawing.Size(235, 66);
+            this.GroupSnapOpt.TabIndex = 15;
+            this.GroupSnapOpt.TabStop = false;
+            this.GroupSnapOpt.Text = "截图选项";
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(704, 441);
+            this.Controls.Add(this.GroupSnapOpt);
+            this.Controls.Add(this.GroupCloseOpt);
             this.Controls.Add(this.TxtKeybinding);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.BtnRebuildStore);
@@ -144,6 +224,10 @@
             this.Text = "设置";
             this.Load += new System.EventHandler(this.ConfigForm_Load);
             this.panel1.ResumeLayout(false);
+            this.GroupCloseOpt.ResumeLayout(false);
+            this.GroupCloseOpt.PerformLayout();
+            this.GroupSnapOpt.ResumeLayout(false);
+            this.GroupSnapOpt.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -160,5 +244,11 @@
         private System.Windows.Forms.Button BtnRebuildStore;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox TxtKeybinding;
+        private System.Windows.Forms.RadioButton RBtnShowMain;
+        private System.Windows.Forms.RadioButton RBtnNotify;
+        private System.Windows.Forms.RadioButton RBtnClose;
+        private System.Windows.Forms.RadioButton RBtnMini;
+        private System.Windows.Forms.GroupBox GroupCloseOpt;
+        private System.Windows.Forms.GroupBox GroupSnapOpt;
     }
 }

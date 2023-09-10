@@ -1,15 +1,18 @@
 ﻿using JsonFlatFileDataStore;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MengOCR
 {
     internal class StoreData
     {
+        public readonly Logger logger = LogManager.GetLogger("StoreData");
+
         static readonly DataStore store;
         static readonly StoreData instance;
 
@@ -67,6 +70,18 @@ namespace MengOCR
 
         }
 
+        public bool HasKey(string key)
+        {
+            try
+            {
+                return store.GetKeys().ContainsKey(key);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// 清空store
         /// </summary>
@@ -106,18 +121,18 @@ namespace MengOCR
                 {
                     var img = Path.GetFileName(file);
                     var imgexist = ocrItemCollection.Find(f => f.ImgFileName == img);
-                    if (imgexist.Count() < 1)
+                    if (imgexist.Count() > 0) continue;
+
+                    //识别图片内容
+                    await AddOCRItemAsync(new OcrDataItem
                     {
-                        //识别图片内容
-                        await AddOCRItemAsync(new OcrDataItem
-                        {
-                            Id = Guid.NewGuid().ToString(),
-                            ImgFileName = img,
-                            WorkspaceName = name,
-                            ContentTxt = "",
-                            CreateTime = new FileInfo(file).CreationTime
-                        });
-                    }
+                        Id = Guid.NewGuid().ToString(),
+                        ImgFileName = img,
+                        WorkspaceName = name,
+                        ContentTxt = "",
+                        CreateTime = new FileInfo(file).CreationTime
+                    });
+
                 }
             }
 
@@ -129,17 +144,63 @@ namespace MengOCR
         /// <returns></returns>
         public async Task InitWorkspace()
         {
-            var collection = store.GetCollection<Workspace>();
-            const string name = "默认工作区";
-            var exist = collection.Find(w => w.Name == name);
-
-            if (exist.Count() > 0)
+            try
             {
-                return;
-            }
+                var collection = store.GetCollection<Workspace>();
+                const string name = "默认工作区";
+                var exist = collection.Find(w => w.Name == name);
 
-            //初始化默认工作区
-            await AddWorkspaceAsync(name);
+                if (exist.Count() > 0)
+                {
+                    return;
+                }
+
+                //初始化默认工作区
+                await AddWorkspaceAsync(name);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+            }
+        }
+
+        /// <summary>
+        /// 初始化默认配置
+        /// </summary>
+        public void InitConfig()
+        {
+            try
+            {
+                if (HasKey(StoreKeys.SnapShowMain) == false)
+                {
+                    SetKeyVal(StoreKeys.SnapShowMain, true);
+                }
+
+                if (HasKey(StoreKeys.CloseExit) == false)
+                {
+                    SetKeyVal(StoreKeys.CloseExit, true);
+                }
+
+                if (HasKey(StoreKeys.SnapSaveDir) == false)
+                {
+                    //设置默认路径
+                    var userPicDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                    var dir = Path.Combine(userPicDir, "MengOCR");
+
+                    SetKeyVal(StoreKeys.SnapSaveDir, dir);
+                }
+
+                if (HasKey(StoreKeys.KeyBingding) == false)
+                {
+                    var mkey = Keys.Shift;
+                    var key = Keys.X;
+                    SetKeyVal(StoreKeys.KeyBingding, $"{mkey}+{key}");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+            }
         }
 
 
@@ -298,6 +359,19 @@ namespace MengOCR
         public string ContentTxt { get; set; }
 
         public DateTime CreateTime { get; set; }
+
+    }
+
+
+    public static class StoreKeys
+    {
+        public static readonly string CloseExit = "closeExit";
+
+        public static readonly string SnapShowMain = "snapShowMain";
+
+        public static readonly string SnapSaveDir = "snapSaveDir";
+
+        public static readonly string KeyBingding = "keyBinding";
 
     }
 
