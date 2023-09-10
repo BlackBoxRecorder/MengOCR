@@ -334,6 +334,7 @@
             // 
             // NotifyIconOCR
             // 
+            this.NotifyIconOCR.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.NotifyIconOCR.Icon = ((System.Drawing.Icon)(resources.GetObject("NotifyIconOCR.Icon")));
             this.NotifyIconOCR.Text = "萌萌哒OCR";
             this.NotifyIconOCR.Visible = true;

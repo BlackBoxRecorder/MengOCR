@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MengOCR
@@ -298,6 +297,19 @@ namespace MengOCR
         public string ContentTxt { get; set; }
 
         public DateTime CreateTime { get; set; }
+
+    }
+
+
+    public static class StoreKeys
+    {
+        public static readonly string CloseExit = "closeExit";
+
+        public static readonly string SnapShowMain = "snapShowMain";
+
+        public static readonly string SnapSaveDir = "snapSaveDir";
+
+        public static readonly string KeyBingding = "keyBinding";
 
     }
 

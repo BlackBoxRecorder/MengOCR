@@ -25,10 +25,10 @@ namespace MengOCR.Forms
         {
             try
             {
-                string SnapSaveDir = StoreData.Instance.GetKeyVal<string>("snapSaveDir");
+                string SnapSaveDir = StoreData.Instance.GetKeyVal<string>(StoreKeys.SnapSaveDir);
                 TxtSnapSaveDir.Text = SnapSaveDir;
 
-                string keyBinding = StoreData.Instance.GetKeyVal<string>("keyBinding");
+                string keyBinding = StoreData.Instance.GetKeyVal<string>(StoreKeys.KeyBingding);
                 TxtKeybinding.Text = keyBinding;
 
             }
@@ -66,7 +66,7 @@ namespace MengOCR.Forms
             var key = e.KeyCode;
             TxtKeybinding.Text = $"{mkey} + {key}";
 
-            StoreData.Instance.SetKeyVal<string>("keyBinding", $"{mkey}+{key}");
+            StoreData.Instance.SetKeyVal<string>(StoreKeys.KeyBingding, $"{mkey}+{key}");
 
         }
 
@@ -80,7 +80,7 @@ namespace MengOCR.Forms
                 TxtSnapSaveDir.Text = folderBrowserDialog.SelectedPath;
             }
 
-            StoreData.Instance.SetKeyVal<string>("snapSaveDir", TxtSnapSaveDir.Text);
+            StoreData.Instance.SetKeyVal<string>(StoreKeys.SnapSaveDir, TxtSnapSaveDir.Text);
         }
 
         private void RBtnMini_CheckedChanged(object sender, EventArgs e)
@@ -88,7 +88,7 @@ namespace MengOCR.Forms
             RadioButton rb = sender as RadioButton;
             if (rb != null && rb.Checked)
             {
-                StoreData.Instance.SetKeyVal<bool>("closeExit", false);
+                StoreData.Instance.SetKeyVal<bool>(StoreKeys.CloseExit, false);
             }
             else
             {
@@ -102,7 +102,7 @@ namespace MengOCR.Forms
             RadioButton rb = sender as RadioButton;
             if (rb != null && rb.Checked)
             {
-                StoreData.Instance.SetKeyVal<bool>("closeExit", true);
+                StoreData.Instance.SetKeyVal<bool>(StoreKeys.CloseExit, true);
             }
             else
             {
@@ -115,7 +115,7 @@ namespace MengOCR.Forms
             RadioButton rb = sender as RadioButton;
             if (rb != null && rb.Checked)
             {
-                StoreData.Instance.SetKeyVal<bool>("snapShowMain", true);
+                StoreData.Instance.SetKeyVal<bool>(StoreKeys.SnapShowMain, true);
             }
             else
             {
@@ -128,7 +128,7 @@ namespace MengOCR.Forms
             RadioButton rb = sender as RadioButton;
             if (rb != null && rb.Checked)
             {
-                StoreData.Instance.SetKeyVal<bool>("snapShowMain", false);
+                StoreData.Instance.SetKeyVal<bool>(StoreKeys.SnapShowMain, false);
             }
             else
             {

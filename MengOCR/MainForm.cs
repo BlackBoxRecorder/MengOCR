@@ -25,6 +25,8 @@ namespace MengOCR
         private string keyBinding = "";
         private bool spaceSeparate = false;
         private bool isExit = false;
+        private bool isShowMain = false;
+
 
         public MainForm()
         {
@@ -77,7 +79,7 @@ namespace MengOCR
             {
                 try
                 {
-                    var ocrResult = engine.DetectStructure(img as System.Drawing.Image) ??
+                    var ocrResult = engine.DetectStructure(img) ??
                         throw new Exception("识别出错了！！！");
 
                     result = Utils.Structure2String(ocrResult, spaceSeparate);
@@ -115,7 +117,7 @@ namespace MengOCR
         {
             try
             {
-                this.Hide();//隐藏当前
+                this.Visible = false;
                 Thread.Sleep(200);
 
                 this.curBitmap = GetScreen();
@@ -148,10 +150,6 @@ namespace MengOCR
                     g.DrawImage(curBitmap, destRect, srcRect, GraphicsUnit.Pixel);//加图像绘制到画布上
                 }
 
-                this.WindowState = FormWindowState.Normal;
-                this.ShowInTaskbar = true;
-                this.StartPosition = FormStartPosition.CenterScreen;
-                this.Show();
                 var txt = this.RunOCR(bmp);
                 this.TxtOCRResult.Text = txt;
 
@@ -183,6 +181,19 @@ namespace MengOCR
                 ListBoxImgFiles.Items.Insert(0, item);
 
                 await StoreData.Instance.AddOCRItemAsync(item);
+
+                if (isShowMain)
+                {
+                    this.WindowState = FormWindowState.Normal;
+                    this.ShowInTaskbar = true;
+                    this.StartPosition = FormStartPosition.CenterScreen;
+                    this.Visible = true;
+                }
+                else
+                {
+                    NotifyIconOCR.ShowBalloonTip(1000, "提示", "截图完成", ToolTipIcon.Info);
+                }
+
             }
             catch (Exception ex)
             {
@@ -292,7 +303,6 @@ namespace MengOCR
         /// </summary>
         private void ReBuildStore()
         {
-
             Task.Run(async () =>
             {
                 await StoreData.Instance.ClearStore();
@@ -326,14 +336,14 @@ namespace MengOCR
         {
             InitOCR();
 
-            SnapSaveDir = StoreData.Instance.GetKeyVal<string>("snapSaveDir");
-            keyBinding = StoreData.Instance.GetKeyVal<string>("keyBinding");
+            SnapSaveDir = StoreData.Instance.GetKeyVal<string>(StoreKeys.SnapSaveDir);
+            keyBinding = StoreData.Instance.GetKeyVal<string>(StoreKeys.KeyBingding);
 
             if (string.IsNullOrEmpty(SnapSaveDir))
             {//没有设置路径，设为默认
                 var userPicDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
                 SnapSaveDir = Path.Combine(userPicDir, "MengOCR");
-                StoreData.Instance.SetKeyVal<string>("snapSaveDir", SnapSaveDir);
+                StoreData.Instance.SetKeyVal<string>(StoreKeys.SnapSaveDir, SnapSaveDir);
             }
 
             if (!Directory.Exists(SnapSaveDir))
@@ -467,12 +477,13 @@ namespace MengOCR
             try
             {
 
-                var opt = StoreData.Instance.GetKeyVal<bool>("closeExit");
+                var opt = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
                 if (opt == true || isExit)
                 {
                     engine.Dispose();
                     k_hook.KeyDownEvent -= new KeyEventHandler(Hook_KeyDown);
                     k_hook.Stop();
+                    NotifyIconOCR.Visible = false;
                 }
                 else
                 {
@@ -484,7 +495,8 @@ namespace MengOCR
                         this.Visible = false;
                         //图标显示在托盘区
                         NotifyIconOCR.Visible = true;
-                        NotifyIconOCR.ShowBalloonTip(2000, "提示", "双击图标显示主窗口", ToolTipIcon.Info);
+                        //NotifyIconOCR.ShowBalloonTip(2000, "提示", "双击图标显示主窗口", ToolTipIcon.Info);
+
                     }
                 }
             }
@@ -719,8 +731,11 @@ namespace MengOCR
             var form = new ConfigForm();
             form.RebuildStoreClick += Form_RebuildStoreClick;
             form.ShowDialog(this);
-
             form.RebuildStoreClick -= Form_RebuildStoreClick;
+
+            isShowMain = StoreData.Instance.GetKeyVal<bool>(StoreKeys.SnapShowMain);
+            isExit = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
+
 
         }
 
