@@ -183,7 +183,7 @@
             // 
             this.GroupCloseOpt.Controls.Add(this.RBtnClose);
             this.GroupCloseOpt.Controls.Add(this.RBtnMini);
-            this.GroupCloseOpt.Location = new System.Drawing.Point(31, 163);
+            this.GroupCloseOpt.Location = new System.Drawing.Point(31, 141);
             this.GroupCloseOpt.Name = "GroupCloseOpt";
             this.GroupCloseOpt.Size = new System.Drawing.Size(249, 66);
             this.GroupCloseOpt.TabIndex = 14;
@@ -194,7 +194,7 @@
             // 
             this.GroupSnapOpt.Controls.Add(this.RBtnShowMain);
             this.GroupSnapOpt.Controls.Add(this.RBtnNotify);
-            this.GroupSnapOpt.Location = new System.Drawing.Point(303, 163);
+            this.GroupSnapOpt.Location = new System.Drawing.Point(303, 141);
             this.GroupSnapOpt.Name = "GroupSnapOpt";
             this.GroupSnapOpt.Size = new System.Drawing.Size(235, 66);
             this.GroupSnapOpt.TabIndex = 15;

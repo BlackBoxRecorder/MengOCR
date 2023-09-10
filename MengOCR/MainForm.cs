@@ -16,11 +16,10 @@ namespace MengOCR
     {
         public static readonly Logger logger = LogManager.GetLogger("MainForm");
 
-        private readonly FileSystemWatcher FsWatcher = new FileSystemWatcher();
         private PaddleOCREngine engine;
         private ScreenSnap snapForm;
         private Bitmap curBitmap;
-        private string SnapSaveDir = "";
+        private string snapSaveDir = "";
         private readonly KeyboardHook k_hook = new KeyboardHook();
         private string keyBinding = "";
         private bool spaceSeparate = false;
@@ -42,33 +41,6 @@ namespace MengOCR
                 OCRParameter oCRParameter = new OCRParameter();
                 engine = new PaddleOCREngine(config, oCRParameter);
             });
-        }
-
-        private void OnFsChanges()
-        {
-            FsWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime;
-            FsWatcher.IncludeSubdirectories = true;
-            FsWatcher.Path = SnapSaveDir;
-            FsWatcher.Created += new FileSystemEventHandler(FsWatcher_Created);
-            FsWatcher.EnableRaisingEvents = true;
-        }
-
-        private void FsWatcher_Created(object sender, FileSystemEventArgs e)
-        {
-            try
-            {
-                string newImgPath = e.FullPath;
-                if (!Utils.IsImageFile(newImgPath)) return;
-                this.BeginInvoke(new EventHandler(delegate
-                {
-                    FileInfo fi = new FileInfo(newImgPath);
-                }));
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
         }
 
         private string RunOCR(Image img)
@@ -140,14 +112,18 @@ namespace MengOCR
         {
             try
             {
-                Bitmap bmp = new Bitmap(snapForm.End.X - snapForm.Start.X, snapForm.End.Y - snapForm.Start.Y);
+                Bitmap bmp = new Bitmap(snapForm.End.X - snapForm.Start.X,
+                    snapForm.End.Y - snapForm.Start.Y);
                 using (Graphics g = Graphics.FromImage(bmp))
                 {
                     int w = snapForm.End.X - snapForm.Start.X;
                     int h = snapForm.End.Y - snapForm.Start.Y;
-                    Rectangle destRect = new Rectangle(0, 0, w + 1, h + 1);//在画布上要显示的区域（记得像素加1）
-                    Rectangle srcRect = new Rectangle(snapForm.Start.X, snapForm.Start.Y, w + 1, h + 1);//图像上要截取的区域
-                    g.DrawImage(curBitmap, destRect, srcRect, GraphicsUnit.Pixel);//加图像绘制到画布上
+                    //在画布上要显示的区域（记得像素加1）
+                    Rectangle destRect = new Rectangle(0, 0, w + 1, h + 1);
+                    //图像上要截取的区域
+                    Rectangle srcRect = new Rectangle(snapForm.Start.X, snapForm.Start.Y, w + 1, h + 1);
+                    //加图像绘制到画布上
+                    g.DrawImage(curBitmap, destRect, srcRect, GraphicsUnit.Pixel);
                 }
 
                 var txt = this.RunOCR(bmp);
@@ -158,7 +134,7 @@ namespace MengOCR
                 var idx = CmbWorkspace.SelectedIndex;
                 var space = CmbWorkspace.Items[idx].ToString();
 
-                var spaceDir = Path.Combine(SnapSaveDir, space);
+                var spaceDir = Path.Combine(snapSaveDir, space);
                 if (!Directory.Exists(spaceDir))
                 {
                     Directory.CreateDirectory(spaceDir);
@@ -178,7 +154,7 @@ namespace MengOCR
                     WorkspaceName = space,
                 };
 
-                ListBoxImgFiles.Items.Insert(0, item);
+                ListBoxImgFiles.Items.Add(item);
 
                 await StoreData.Instance.AddOCRItemAsync(item);
 
@@ -307,13 +283,13 @@ namespace MengOCR
             {
                 await StoreData.Instance.ClearStore();
                 await StoreData.Instance.InitWorkspace();
-                await StoreData.Instance.SyncWorkspace(SnapSaveDir);
+                await StoreData.Instance.SyncWorkspace(snapSaveDir);
 
                 var allItems = StoreData.Instance.GetAllOCRItems();
 
                 foreach (var item in allItems)
                 {
-                    var filepath = Path.Combine(SnapSaveDir, item.WorkspaceName, item.ImgFileName);
+                    var filepath = Path.Combine(snapSaveDir, item.WorkspaceName, item.ImgFileName);
                     if (!File.Exists(filepath))
                     {
                         throw new FileNotFoundException(filepath);
@@ -336,24 +312,13 @@ namespace MengOCR
         {
             InitOCR();
 
-            SnapSaveDir = StoreData.Instance.GetKeyVal<string>(StoreKeys.SnapSaveDir);
+            StoreData.Instance.InitConfig();
+
+            snapSaveDir = StoreData.Instance.GetKeyVal<string>(StoreKeys.SnapSaveDir);
             keyBinding = StoreData.Instance.GetKeyVal<string>(StoreKeys.KeyBingding);
+            isExit = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
+            isShowMain = StoreData.Instance.GetKeyVal<bool>(StoreKeys.SnapShowMain);
 
-            if (string.IsNullOrEmpty(SnapSaveDir))
-            {//没有设置路径，设为默认
-                var userPicDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-                SnapSaveDir = Path.Combine(userPicDir, "MengOCR");
-                StoreData.Instance.SetKeyVal<string>(StoreKeys.SnapSaveDir, SnapSaveDir);
-            }
-
-            if (!Directory.Exists(SnapSaveDir))
-            {
-                Directory.CreateDirectory(SnapSaveDir);
-            }
-
-            OnFsChanges();
-
-            NotifyIconOCR.Visible = true;
             ListBoxImgFiles.DisplayMember = "ImgFileName";
             ListBoxImgFiles.ValueMember = "ImgFileName";
 
@@ -365,6 +330,7 @@ namespace MengOCR
             k_hook.KeyDownEvent += new KeyEventHandler(Hook_KeyDown);//钩住键按下
             k_hook.Start();//安装键盘钩子
 
+            NotifyIconOCR.Visible = true;
             NotifyIconOCR.ContextMenuStrip = IconMenu;
 
         }
@@ -430,14 +396,11 @@ namespace MengOCR
         {
             try
             {
-
                 var txt = RunOCR(PicBoxSnap.Image);
-
                 if (!string.IsNullOrEmpty(txt))
                 {
                     TxtOCRResult.Text = txt;
                 }
-
             }
             catch (Exception ex)
             {
@@ -476,17 +439,7 @@ namespace MengOCR
         {
             try
             {
-                bool opt;
-                if (StoreData.Instance.HasKey(StoreKeys.CloseExit))
-                {
-                    opt = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
-                }
-                else
-                {
-                    opt = false;
-                }
-
-                if (opt == true || isExit)
+                if (isExit)
                 {
                     engine.Dispose();
                     k_hook.KeyDownEvent -= new KeyEventHandler(Hook_KeyDown);
@@ -525,7 +478,7 @@ namespace MengOCR
                     return;
                 }
                 if (!(ListBoxImgFiles.SelectedItem is OcrDataItem ocr)) { return; }
-                string imgPath = Path.Combine(SnapSaveDir, ocr.WorkspaceName, ocr.ImgFileName);
+                string imgPath = Path.Combine(snapSaveDir, ocr.WorkspaceName, ocr.ImgFileName);
 
                 TxtOCRResult.Text = ocr.ContentTxt;
 
@@ -603,7 +556,7 @@ namespace MengOCR
             {
                 var space = GetSelectedWorkspace();
 
-                var source = Path.Combine(SnapSaveDir, space);
+                var source = Path.Combine(snapSaveDir, space);
                 var form = new InputForm();
                 form.Text = "工作区重命名";
                 form.OldValue = space;
@@ -613,7 +566,7 @@ namespace MengOCR
                 {
                     return;
                 }
-                var dist = Path.Combine(SnapSaveDir, newspace);
+                var dist = Path.Combine(snapSaveDir, newspace);
                 //修改目录名称
                 if (Directory.Exists(source))
                 {
@@ -653,7 +606,7 @@ namespace MengOCR
                     StoreData.Instance.DeleteWorkspaceAsync(space);
 
                     //删除工作区目录
-                    var dir = Path.Combine(SnapSaveDir, space);
+                    var dir = Path.Combine(snapSaveDir, space);
                     if (Directory.Exists(dir))
                     {
                         Directory.Delete(dir, true);
@@ -692,8 +645,8 @@ namespace MengOCR
                     //更新store
                     await StoreData.Instance.UpdateOCRItemAsync(item);
                     //更新文件名
-                    var source = Path.Combine(SnapSaveDir, item.WorkspaceName, oldname);
-                    var dist = Path.Combine(SnapSaveDir, item.WorkspaceName, newname);
+                    var source = Path.Combine(snapSaveDir, item.WorkspaceName, oldname);
+                    var dist = Path.Combine(snapSaveDir, item.WorkspaceName, newname);
 
                     if (File.Exists(source))
                     {
@@ -719,7 +672,7 @@ namespace MengOCR
                     await StoreData.Instance.DeleteOCRItemAsync(item.Id);
                     //删除文件
 
-                    var file = Path.Combine(SnapSaveDir, item.WorkspaceName, item.ImgFileName);
+                    var file = Path.Combine(snapSaveDir, item.WorkspaceName, item.ImgFileName);
                     if (File.Exists(file))
                     {
                         File.Delete(file);
@@ -741,15 +694,8 @@ namespace MengOCR
             form.ShowDialog(this);
             form.RebuildStoreClick -= Form_RebuildStoreClick;
 
-            if (StoreData.Instance.HasKey(StoreKeys.CloseExit))
-            {
-                isExit = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
-            }
-            if (StoreData.Instance.HasKey(StoreKeys.SnapShowMain))
-            {
-                isShowMain = StoreData.Instance.GetKeyVal<bool>(StoreKeys.SnapShowMain);
-            }
-
+            isExit = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
+            isShowMain = StoreData.Instance.GetKeyVal<bool>(StoreKeys.SnapShowMain);
         }
 
         private void Form_RebuildStoreClick(object sender, EventArgs e)
@@ -769,10 +715,8 @@ namespace MengOCR
 
         private void BtnExportPdf_Click(object sender, EventArgs e)
         {
-
             var exportform = new ExportPdfForm();
             exportform.ShowDialog(this);
-
         }
 
     }

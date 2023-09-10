@@ -12,7 +12,6 @@ namespace MengOCR
     internal static class Utils
     {
 
-
         public static bool IsImageFile(string file)
         {
             try
@@ -23,7 +22,7 @@ namespace MengOCR
                     case ".jpg":
                     case ".jpeg":
                     case ".png":
-                    case ".bitmap":
+                    case ".bmp":
                         return true;
                     default:
                         return false;
@@ -34,8 +33,6 @@ namespace MengOCR
                 return false;
             }
         }
-
-
 
         /// <summary>
         /// 根据图片路径获取字节
@@ -62,8 +59,6 @@ namespace MengOCR
             }
             return buffer;
         }
-
-
 
         public static bool IsFileInUse(string fileName)
         {
@@ -104,7 +99,6 @@ namespace MengOCR
 
             return null;
         }
-
 
         public static string Structure2String(OCRStructureResult structureResult, bool spaceSeparate = false)
         {
@@ -152,13 +146,11 @@ namespace MengOCR
             return null;
         }
 
-
         public static void ImgTest()
         {
             try
             {
                 string imgtest = @"C:\Users\imyin\Pictures\MengOCR\默认工作区\2023-6-23 17.47.34.png";
-                string imgwall = @"C:\yin-data\images\ImageOnline\1920×1080\0c47d355621d442d9c66c6f0232b0f81.jpg";
 
                 var img = new MagickImage(imgtest);
 
@@ -183,7 +175,6 @@ namespace MengOCR
                 Console.WriteLine(ex);
             }
         }
-
 
     }
 

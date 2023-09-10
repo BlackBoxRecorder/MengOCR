@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MengOCR
 {
@@ -117,18 +118,18 @@ namespace MengOCR
                 {
                     var img = Path.GetFileName(file);
                     var imgexist = ocrItemCollection.Find(f => f.ImgFileName == img);
-                    if (imgexist.Count() < 1)
+                    if (imgexist.Count() > 0) continue;
+
+                    //识别图片内容
+                    await AddOCRItemAsync(new OcrDataItem
                     {
-                        //识别图片内容
-                        await AddOCRItemAsync(new OcrDataItem
-                        {
-                            Id = Guid.NewGuid().ToString(),
-                            ImgFileName = img,
-                            WorkspaceName = name,
-                            ContentTxt = "",
-                            CreateTime = new FileInfo(file).CreationTime
-                        });
-                    }
+                        Id = Guid.NewGuid().ToString(),
+                        ImgFileName = img,
+                        WorkspaceName = name,
+                        ContentTxt = "",
+                        CreateTime = new FileInfo(file).CreationTime
+                    });
+
                 }
             }
 
@@ -151,6 +152,43 @@ namespace MengOCR
 
             //初始化默认工作区
             await AddWorkspaceAsync(name);
+        }
+
+        /// <summary>
+        /// 初始化默认配置
+        /// </summary>
+        public void InitConfig()
+        {
+            if (HasKey(StoreKeys.SnapShowMain) == false)
+            {
+                SetKeyVal(StoreKeys.SnapShowMain, true);
+            }
+
+            if (HasKey(StoreKeys.CloseExit) == false)
+            {
+                SetKeyVal(StoreKeys.CloseExit, true);
+            }
+            string dir = "";
+            if (HasKey(StoreKeys.SnapSaveDir) == false)
+            {
+                //设置默认路径
+                var userPicDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                dir = Path.Combine(userPicDir, "MengOCR");
+                SetKeyVal(StoreKeys.SnapSaveDir, dir);
+            }
+
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            if (HasKey(StoreKeys.KeyBingding) == false)
+            {
+                var mkey = Keys.Shift;
+                var key = Keys.X;
+                SetKeyVal(StoreKeys.KeyBingding, $"{mkey}+{key}");
+            }
+
         }
 
 
