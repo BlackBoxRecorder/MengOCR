@@ -319,6 +319,11 @@ namespace MengOCR
             isExit = StoreData.Instance.GetKeyVal<bool>(StoreKeys.CloseExit);
             isShowMain = StoreData.Instance.GetKeyVal<bool>(StoreKeys.SnapShowMain);
 
+            if (!Directory.Exists(snapSaveDir))
+            {
+                Directory.CreateDirectory(snapSaveDir);
+            }
+
             ListBoxImgFiles.DisplayMember = "ImgFileName";
             ListBoxImgFiles.ValueMember = "ImgFileName";
 

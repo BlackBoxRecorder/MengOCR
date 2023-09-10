@@ -8,7 +8,7 @@ namespace MengOCR.Forms
 {
     public partial class ExportPdfForm : Form
     {
-        private Color SelectedBgColor;
+        private Color SelectedBgColor = Color.White;
 
 
         public ExportPdfForm()

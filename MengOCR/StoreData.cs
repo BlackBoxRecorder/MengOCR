@@ -1,4 +1,5 @@
 ﻿using JsonFlatFileDataStore;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +11,8 @@ namespace MengOCR
 {
     internal class StoreData
     {
+        public readonly Logger logger = LogManager.GetLogger("StoreData");
+
         static readonly DataStore store;
         static readonly StoreData instance;
 
@@ -141,17 +144,24 @@ namespace MengOCR
         /// <returns></returns>
         public async Task InitWorkspace()
         {
-            var collection = store.GetCollection<Workspace>();
-            const string name = "默认工作区";
-            var exist = collection.Find(w => w.Name == name);
-
-            if (exist.Count() > 0)
+            try
             {
-                return;
-            }
+                var collection = store.GetCollection<Workspace>();
+                const string name = "默认工作区";
+                var exist = collection.Find(w => w.Name == name);
 
-            //初始化默认工作区
-            await AddWorkspaceAsync(name);
+                if (exist.Count() > 0)
+                {
+                    return;
+                }
+
+                //初始化默认工作区
+                await AddWorkspaceAsync(name);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+            }
         }
 
         /// <summary>
@@ -159,36 +169,38 @@ namespace MengOCR
         /// </summary>
         public void InitConfig()
         {
-            if (HasKey(StoreKeys.SnapShowMain) == false)
+            try
             {
-                SetKeyVal(StoreKeys.SnapShowMain, true);
-            }
+                if (HasKey(StoreKeys.SnapShowMain) == false)
+                {
+                    SetKeyVal(StoreKeys.SnapShowMain, true);
+                }
 
-            if (HasKey(StoreKeys.CloseExit) == false)
-            {
-                SetKeyVal(StoreKeys.CloseExit, true);
-            }
-            string dir = "";
-            if (HasKey(StoreKeys.SnapSaveDir) == false)
-            {
-                //设置默认路径
-                var userPicDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-                dir = Path.Combine(userPicDir, "MengOCR");
-                SetKeyVal(StoreKeys.SnapSaveDir, dir);
-            }
+                if (HasKey(StoreKeys.CloseExit) == false)
+                {
+                    SetKeyVal(StoreKeys.CloseExit, true);
+                }
 
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
+                if (HasKey(StoreKeys.SnapSaveDir) == false)
+                {
+                    //设置默认路径
+                    var userPicDir = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                    var dir = Path.Combine(userPicDir, "MengOCR");
 
-            if (HasKey(StoreKeys.KeyBingding) == false)
-            {
-                var mkey = Keys.Shift;
-                var key = Keys.X;
-                SetKeyVal(StoreKeys.KeyBingding, $"{mkey}+{key}");
-            }
+                    SetKeyVal(StoreKeys.SnapSaveDir, dir);
+                }
 
+                if (HasKey(StoreKeys.KeyBingding) == false)
+                {
+                    var mkey = Keys.Shift;
+                    var key = Keys.X;
+                    SetKeyVal(StoreKeys.KeyBingding, $"{mkey}+{key}");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+            }
         }
 
 
